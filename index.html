@@ -1,0 +1,3878 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="Portfolio de Lubin DAUL, étudiant en BUT Info-Com parcours publicité à l'IUT de Besançon. Recherche alternance en communication."
+  />
+  <title>Lubin DAUL - Portfolio Communication</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: Tahoma, "MS Sans Serif", Arial, sans-serif;
+      font-size: 11px;
+      cursor: default;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    #desktop {
+      position: fixed;
+      inset: 0 0 30px 0;
+      background-color: #3a6ea5;
+      background-image: url("assets/windows%20xp%20fond.jpg");
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    .desktop-icon {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 108px;
+      padding: 6px 4px 4px;
+      text-align: center;
+      color: #fff;
+      text-shadow: 1px 1px 1px #000, -1px -1px 1px #000;
+      cursor: pointer;
+    }
+
+    .desktop-icon:hover,
+    .desktop-icon.selected {
+      background: rgba(49, 106, 197, 0.55);
+      outline: 1px dotted rgba(255, 255, 255, 0.6);
+    }
+
+    /* Emplacement fixe pour toutes les icônes → libellés alignés */
+    .desktop-icon .icon-slot {
+      display: flex;
+      width: 100%;
+      height: 58px;
+      flex-shrink: 0;
+      align-items: flex-end;
+      justify-content: center;
+      margin-bottom: 4px;
+      overflow: visible;
+    }
+
+    .desktop-icon .icon-slot img {
+      width: 52px;
+      height: 52px;
+      margin: 0;
+      object-fit: contain;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+    }
+
+    .desktop-icon .desktop-label {
+      display: block;
+      line-height: 1.3;
+      font-size: 12px;
+      word-wrap: break-word;
+    }
+
+    /* Contact + À propos : même hauteur d’emplacement → libellés alignés */
+    .desktop-icon[data-win="contact"] .icon-slot,
+    .desktop-icon[data-win="apropos"] .icon-slot {
+      height: 88px;
+    }
+
+    .desktop-icon.icon-ld-logo-wrap .icon-slot img {
+      width: 88px;
+      height: 88px;
+    }
+
+    .desktop-icon.icon-youtube-wrap {
+      width: 120px;
+      z-index: 2;
+    }
+
+    .desktop-icon.icon-youtube-wrap .icon-slot {
+      overflow: visible;
+    }
+
+    .desktop-icon.icon-youtube-wrap .icon-slot img.icon-youtube {
+      width: auto;
+      max-width: 96px;
+      height: 72px;
+      object-fit: contain;
+    }
+
+    .xp-window {
+      position: absolute;
+      display: none;
+      flex-direction: column;
+      min-width: 400px;
+      min-height: 260px;
+      background: #ece9d8;
+      border: 1px solid #0054e3;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.35);
+    }
+
+    .xp-window.visible { display: flex; }
+
+    .xp-window.maximized {
+      left: 0 !important;
+      top: 0 !important;
+      width: 100% !important;
+      height: calc(100vh - 30px) !important;
+    }
+
+    .titlebar {
+      height: 26px;
+      padding: 0 3px 0 5px;
+      display: flex;
+      align-items: center;
+      color: #fff;
+      font-weight: bold;
+      font-size: 11px;
+      cursor: move;
+      background: linear-gradient(180deg, #0a246a 0%, #3a6ea5 12%, #4a8fd4 45%, #316ac5 90%, #2151a5 100%);
+    }
+
+    .titlebar.inactive {
+      background: linear-gradient(180deg, #7a96c4 0%, #b8c8e0 45%, #8fa8c8 100%);
+      color: #d8e8f8;
+    }
+
+    .titlebar-icon {
+      width: 16px;
+      height: 16px;
+      margin-right: 5px;
+      flex-shrink: 0;
+    }
+
+    .titlebar-text {
+      flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .titlebar-buttons {
+      display: flex;
+      gap: 2px;
+      margin-left: 4px;
+    }
+
+    .titlebar-buttons button {
+      width: 21px;
+      height: 21px;
+      border: 1px solid #fff;
+      border-radius: 3px;
+      font-family: Tahoma, sans-serif;
+      font-size: 10px;
+      font-weight: bold;
+      line-height: 17px;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .btn-min,
+    .btn-max {
+      background: linear-gradient(180deg, #5ca0e8 0%, #3a7fd4 50%, #2566b8 100%);
+      color: #fff;
+    }
+
+    .btn-max { font-size: 9px; }
+
+    .btn-close {
+      background: linear-gradient(180deg, #f0a090 0%, #e06040 50%, #c03020 100%);
+      color: #fff;
+      font-size: 12px;
+      border-color: #ffd0c0;
+    }
+
+    .titlebar-buttons button:hover { filter: brightness(1.12); }
+
+    .menubar {
+      display: flex;
+      gap: 14px;
+      padding: 3px 6px;
+      background: #ece9d8;
+      border-bottom: 1px solid #aca899;
+      font-size: 11px;
+    }
+
+    .menubar span { padding: 0 2px; cursor: default; }
+
+    .explorer-body {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 185px;
+      flex-shrink: 0;
+      padding: 8px 6px;
+      overflow-y: auto;
+      background: linear-gradient(180deg, #7ba2e7 0%, #6375d6 55%, #5c6fd6 100%);
+    }
+
+    .task-panel {
+      margin-bottom: 8px;
+      padding: 8px 10px 10px;
+      background: #fff;
+      border: 1px solid #919b9c;
+      border-radius: 6px 6px 0 0;
+      box-shadow: 1px 1px 0 #fff inset;
+    }
+
+    .task-panel h3 {
+      margin-bottom: 6px;
+      font-size: 11px;
+      font-weight: bold;
+      color: #2151a5;
+    }
+
+    .task-panel ul {
+      list-style: none;
+      font-size: 10px;
+      line-height: 1.55;
+      color: #333;
+    }
+
+    .task-panel a {
+      color: #2151a5;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .file-area {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+      gap: 18px;
+      align-content: start;
+      padding: 18px;
+      overflow-y: auto;
+      background: #fff;
+    }
+
+    .file-item {
+      padding: 10px 6px;
+      text-align: center;
+      cursor: pointer;
+      border: 1px solid transparent;
+      min-height: 110px;
+    }
+
+    .file-item:hover {
+      background: #e8f4fc;
+      border: 1px dotted #316ac5;
+    }
+
+    .file-item img {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 8px;
+      object-fit: contain;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+    }
+
+    .file-item img.brand-icon {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 8px;
+      object-fit: contain;
+    }
+
+    /* Logos horizontaux (ex. Ferco) : pas d’étirement en largeur */
+    .file-item img.brand-icon--wide {
+      width: auto;
+      max-width: 72px;
+      height: 48px;
+      margin-left: auto;
+      margin-right: auto;
+      object-fit: contain;
+    }
+
+    .detail-popup .content-pane img.detail-logo {
+      display: block;
+      max-width: 180px;
+      max-height: 120px;
+      margin-bottom: 14px;
+      object-fit: contain;
+    }
+
+    .detail-popup .content-pane img.detail-logo--wide {
+      max-width: 140px;
+      max-height: 72px;
+      width: auto;
+      height: auto;
+    }
+
+    /* YouTube rétro (2005-2006) */
+    .yt-retro {
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      background: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 12px;
+      color: #000;
+      -webkit-user-select: text;
+      user-select: text;
+    }
+
+    .yt-retro a { color: #03c; text-decoration: underline; cursor: pointer; }
+
+    .yt-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px 10px 0;
+      border-bottom: 1px solid #ccc;
+      background: #fff;
+    }
+
+    .yt-logo-block {
+      line-height: 1;
+      margin: 0;
+      padding: 0;
+      flex-shrink: 0;
+    }
+
+    .yt-logo-img {
+      display: block;
+      width: auto;
+      height: 72px;
+      max-width: 280px;
+      margin: 0;
+      padding: 0;
+      object-fit: contain;
+      object-position: left center;
+    }
+
+    .yt-tagline {
+      font-size: 11px;
+      color: #666;
+      margin-top: 2px;
+    }
+
+    .yt-account-links {
+      font-size: 11px;
+      color: #03c;
+      text-align: right;
+      line-height: 1.5;
+    }
+
+    .yt-account-links a {
+      cursor: pointer;
+    }
+
+    .yt-modal-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.35);
+    }
+
+    .yt-modal-overlay.open { display: flex; }
+
+    .yt-modal {
+      width: 92%;
+      max-width: 400px;
+      border: 2px solid #0054e3;
+      background: #ece9d8;
+      box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .yt-modal .titlebar { cursor: default; }
+
+    .yt-modal-body {
+      padding: 14px 16px 16px;
+      background: #fff;
+      font-size: 12px;
+      line-height: 1.5;
+      -webkit-user-select: text;
+      user-select: text;
+    }
+
+    .yt-modal-body label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .yt-modal-body input,
+    .yt-modal-body textarea {
+      width: 100%;
+      margin-top: 4px;
+      padding: 5px 6px;
+      border: 1px solid #7f9db9;
+      font-family: Tahoma, Arial, sans-serif;
+      font-size: 12px;
+      background: #fff;
+    }
+
+    .yt-modal-body textarea { min-height: 56px; resize: vertical; }
+
+    .yt-modal-actions {
+      margin-top: 14px;
+      text-align: right;
+    }
+
+    .yt-modal-actions button {
+      padding: 5px 16px;
+      border: 1px solid #999;
+      background: linear-gradient(180deg, #f8f8f8, #d4d0c8);
+      font-size: 11px;
+      cursor: pointer;
+      margin-left: 6px;
+    }
+
+    .yt-search-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: #f3f3f3;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .yt-search-row input[type="text"] {
+      flex: 1;
+      max-width: 320px;
+      padding: 4px 6px;
+      border: 1px solid #999;
+      font-size: 12px;
+    }
+
+    .yt-search-row select {
+      padding: 3px;
+      font-size: 11px;
+    }
+
+    .yt-search-row button {
+      padding: 4px 14px;
+      border: 1px solid #999;
+      background: linear-gradient(180deg, #f8f8f8, #e0e0e0);
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .yt-tabs {
+      display: flex;
+      gap: 2px;
+      padding: 0 14px;
+      background: #e8e8e8;
+      border-bottom: 1px solid #999;
+    }
+
+    .yt-tab {
+      padding: 6px 14px;
+      margin-top: 4px;
+      border: 1px solid #999;
+      border-bottom: none;
+      background: #d8d8d8;
+      font-size: 12px;
+      font-weight: bold;
+      color: #03c;
+      cursor: pointer;
+    }
+
+    .yt-tab.active {
+      background: #fff;
+      color: #000;
+      margin-bottom: -1px;
+      padding-bottom: 7px;
+    }
+
+    .yt-tab.disabled {
+      color: #999;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .yt-panel.hidden { display: none !important; }
+
+    .yt-open-youtube-btn {
+      display: inline-block;
+      margin: 14px 0;
+      padding: 10px 20px;
+      border: 2px solid #c00;
+      background: linear-gradient(180deg, #fff5f5, #ffe0e0);
+      color: #c00;
+      font-size: 14px;
+      font-weight: bold;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .yt-open-youtube-btn:hover {
+      background: #c00;
+      color: #fff;
+    }
+
+    .yt-watch-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .yt-watch-actions .yt-open-youtube-btn {
+      margin: 0;
+    }
+
+    .yt-coulisses {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid #ddd;
+    }
+
+    .yt-coulisses-text {
+      margin: 0 0 12px;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #222;
+    }
+
+    .yt-coulisses-photos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .yt-coulisses-photos img {
+      width: auto;
+      max-width: min(240px, calc(50% - 10px));
+      max-height: 110px;
+      object-fit: contain;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+      background: #f5f5f5;
+    }
+
+    .yt-row-coulisses {
+      flex-shrink: 0;
+      align-self: center;
+      padding: 4px 0 0 8px;
+    }
+
+    .yt-row-coulisses-btn {
+      padding: 6px 14px;
+      border: 2px solid #333;
+      background: #fff;
+      color: #c45a10;
+      font-size: 13px;
+      font-weight: bold;
+      font-family: Tahoma, Verdana, sans-serif;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .yt-row-coulisses-btn:hover {
+      background: #fff8f0;
+    }
+
+    .yt-watch-thumb {
+      display: block;
+      max-width: 480px;
+      width: 100%;
+      border: 2px solid #999;
+      margin: 10px 0;
+      cursor: pointer;
+    }
+
+    .yt-watch-note {
+      margin-top: 10px;
+      padding: 10px;
+      background: #fffde7;
+      border: 1px solid #e6c200;
+      font-size: 11px;
+      color: #333;
+    }
+
+    .yt-subnav {
+      padding: 6px 14px;
+      font-size: 11px;
+      color: #03c;
+      border-bottom: 1px solid #eee;
+      background: #fff;
+    }
+
+    .yt-body {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .yt-main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 14px;
+      border-right: 1px solid #ddd;
+    }
+
+    .yt-sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      overflow-y: auto;
+      padding: 12px;
+      background: #fafafa;
+      font-size: 11px;
+    }
+
+    .yt-sidebar-box {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 12px;
+      background: #fff;
+    }
+
+    .yt-sidebar-box h4 {
+      font-size: 12px;
+      margin-bottom: 8px;
+      color: #000;
+    }
+
+    .yt-section-title {
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #ccc;
+      color: #333;
+    }
+
+    .yt-video-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+    }
+
+    .yt-video-row:hover { background: #f5f9ff; }
+
+    .yt-thumb {
+      width: 140px;
+      height: 105px;
+      flex-shrink: 0;
+      background: #222;
+      border: 1px solid #999;
+      object-fit: cover;
+    }
+
+    .yt-thumb.placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #aaa;
+      font-size: 10px;
+      text-align: center;
+      padding: 4px;
+      background: #e8e8e8;
+    }
+
+    .yt-video-meta h3 {
+      font-size: 13px;
+      font-weight: bold;
+      color: #03c;
+      margin-bottom: 4px;
+    }
+
+    .yt-video-meta .yt-meta-line {
+      font-size: 11px;
+      color: #333;
+      margin-bottom: 3px;
+    }
+
+    .yt-video-meta .yt-meta-note {
+      margin-top: 2px;
+      color: #444;
+    }
+
+    .yt-stars { color: #c00; letter-spacing: 1px; font-size: 11px; }
+
+    .yt-watch {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .yt-watch.visible { display: flex; }
+
+    .yt-watch-bar {
+      padding: 8px 14px;
+      background: #f3f3f3;
+      border-bottom: 1px solid #ddd;
+      font-size: 11px;
+    }
+
+    .yt-watch-bar button {
+      padding: 3px 10px;
+      border: 1px solid #999;
+      background: #eee;
+      cursor: pointer;
+      font-size: 11px;
+      margin-right: 8px;
+    }
+
+    .yt-player-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      padding: 12px 14px;
+      overflow-y: auto;
+      background: #fff;
+    }
+
+    .yt-player-wrap h2 {
+      font-size: 16px;
+      color: #03c;
+      margin-bottom: 8px;
+    }
+
+    .yt-embed {
+      width: 100%;
+      max-width: 640px;
+      aspect-ratio: 4 / 3;
+      border: 1px solid #999;
+      background: #000;
+    }
+
+    .yt-embed iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .yt-home.hidden { display: none; }
+
+    /* Blog JPO (style Skyrock / Web 2.0) */
+    .jpo-blog {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      background: #f4ecef;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 12px;
+      color: #333;
+      -webkit-user-select: text;
+      user-select: text;
+    }
+
+    .jpo-blog-hero {
+      padding: 14px 16px;
+      background: linear-gradient(180deg, #eebabb 0%, #ffffff 70%);
+      border-bottom: 3px solid #861c35;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .jpo-blog-hero img.jpo-logo-main {
+      height: 64px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .jpo-blog-hero h1 {
+      font-size: 20px;
+      color: #861c35;
+      margin: 0 0 4px;
+    }
+
+    .jpo-role-badge {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 4px 12px;
+      background: linear-gradient(180deg, #b32e49, #861c35);
+      color: #fff;
+      font-weight: bold;
+      font-size: 11px;
+      border-radius: 12px;
+      box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .jpo-blog-layout {
+      display: flex;
+      gap: 12px;
+      padding: 12px;
+      align-items: flex-start;
+    }
+
+    .jpo-main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .jpo-sidebar {
+      width: 200px;
+      flex-shrink: 0;
+    }
+
+    .jpo-box {
+      margin-bottom: 12px;
+      background: #fff;
+      border: 1px solid #d8b8c0;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 1px 2px 6px rgba(134, 28, 53, 0.12);
+    }
+
+    .jpo-box-header {
+      padding: 8px 12px;
+      background: linear-gradient(180deg, #eebabb, #ffffff);
+      border-bottom: 1px solid #d8b8c0;
+      font-weight: bold;
+      font-size: 13px;
+      color: #861c35;
+    }
+
+    .jpo-box-body {
+      padding: 12px 14px;
+      line-height: 1.55;
+      font-size: 12px;
+    }
+
+    .jpo-box-body p {
+      margin-bottom: 10px;
+    }
+
+    .jpo-box-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .jpo-box-body ul {
+      margin: 8px 0 0 18px;
+    }
+
+    .jpo-box-body li {
+      margin-bottom: 6px;
+    }
+
+    .jpo-media {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .jpo-media img {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #d8b8c0;
+      border-radius: 6px;
+    }
+
+    .jpo-media-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .jpo-media-grid img {
+      width: 100%;
+      border: 1px solid #d8b8c0;
+      border-radius: 6px;
+    }
+
+    .jpo-caption {
+      font-size: 10px;
+      color: #666;
+      margin-top: 4px;
+      text-align: center;
+    }
+
+    .jpo-sidebar-title {
+      margin: 0 0 10px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #b32e49;
+      font-size: 13px;
+      font-weight: bold;
+      color: #861c35;
+      text-align: center;
+    }
+
+    .jpo-side-stat {
+      text-align: center;
+      padding: 12px;
+      background: linear-gradient(180deg, #fff, #eebabb);
+      border-radius: 10px;
+      border: 1px solid #b32e49;
+      margin-bottom: 10px;
+    }
+
+    .jpo-side-stat strong {
+      display: block;
+      font-size: 22px;
+      color: #b32e49;
+    }
+
+    .jpo-cta {
+      display: block;
+      margin-top: 10px;
+      padding: 10px;
+      text-align: center;
+      background: linear-gradient(180deg, #d85a75, #b32e49 50%, #861c35);
+      color: #fff;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 8px;
+      border: 1px solid #861c35;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .jpo-cta:hover {
+      filter: brightness(1.08);
+    }
+
+    /* Blog E.Leclerc */
+    .leclerc-blog {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      background: #f0f6fa;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 12px;
+      color: #333;
+      -webkit-user-select: text;
+      user-select: text;
+    }
+
+    .leclerc-blog-hero {
+      padding: 14px 16px;
+      background: linear-gradient(180deg, #f47924 0%, #ffffff 55%);
+      border-bottom: 3px solid #04578e;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .leclerc-blog-hero img.leclerc-logo-main {
+      height: 56px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .leclerc-blog-hero h1 {
+      font-size: 20px;
+      color: #04578e;
+      margin: 0 0 4px;
+    }
+
+    .leclerc-role-badge {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 4px 12px;
+      background: linear-gradient(180deg, #f47924, #04578e);
+      color: #fff;
+      font-weight: bold;
+      font-size: 11px;
+      border-radius: 12px;
+    }
+
+    .leclerc-blog-layout {
+      display: flex;
+      gap: 12px;
+      padding: 12px;
+      align-items: flex-start;
+    }
+
+    .leclerc-main { flex: 1; min-width: 0; }
+
+    .leclerc-sidebar {
+      width: 200px;
+      flex-shrink: 0;
+    }
+
+    .leclerc-box {
+      margin-bottom: 12px;
+      background: #fff;
+      border: 1px solid #b8d4e8;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 1px 2px 6px rgba(4, 87, 142, 0.12);
+    }
+
+    .leclerc-box.leclerc-box--highlight {
+      border: 2px solid #f47924;
+      box-shadow: 0 2px 10px rgba(244, 121, 36, 0.25);
+    }
+
+    .leclerc-box-header {
+      padding: 8px 12px;
+      background: linear-gradient(180deg, #d4e8f4, #ffffff);
+      border-bottom: 1px solid #b8d4e8;
+      font-weight: bold;
+      font-size: 13px;
+      color: #04578e;
+    }
+
+    .leclerc-box--highlight .leclerc-box-header {
+      background: linear-gradient(180deg, #fde0c8, #ffffff);
+      color: #c45a10;
+    }
+
+    .leclerc-box-body {
+      padding: 12px 14px;
+      line-height: 1.55;
+      font-size: 12px;
+    }
+
+    .leclerc-box-body p { margin-bottom: 10px; }
+    .leclerc-box-body p:last-child { margin-bottom: 0; }
+    .leclerc-box-body ul { margin: 8px 0 0 18px; }
+    .leclerc-box-body li { margin-bottom: 6px; }
+
+    .leclerc-tools-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .leclerc-tool-pill {
+      padding: 8px 10px;
+      text-align: center;
+      background: linear-gradient(180deg, #fff, #e8f4fc);
+      border: 1px solid #04578e;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 11px;
+      color: #04578e;
+    }
+
+    .leclerc-tiktok-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .leclerc-tiktok-item {
+      background: #fafafa;
+      border: 1px solid #b8d4e8;
+      border-radius: 8px;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .leclerc-tiktok-item video {
+      width: 100%;
+      max-height: 280px;
+      background: #000;
+      border: 1px solid #04578e;
+      border-radius: 4px;
+    }
+
+    .leclerc-tiktok-item .projet-fs-btn {
+      margin-top: 8px;
+      width: 100%;
+    }
+
+    .leclerc-caption {
+      font-size: 10px;
+      color: #666;
+      margin-top: 4px;
+      text-align: center;
+    }
+
+    .leclerc-media {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .leclerc-media img {
+      display: block;
+      margin: 0 auto;
+      max-width: 200px;
+      max-height: 95px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border: 1px solid #b8d4e8;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .leclerc-media-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+      align-items: start;
+    }
+
+    .leclerc-media-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      min-width: 0;
+    }
+
+    .leclerc-media-thumb {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      width: 100%;
+      height: 130px;
+    }
+
+    .leclerc-media-grid img {
+      display: block;
+      max-width: 100%;
+      max-height: 130px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border: 1px solid #b8d4e8;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .leclerc-media-item .projet-fs-btn {
+      margin: 6px auto 0;
+      width: 100%;
+      max-width: 120px;
+      font-size: 10px;
+      padding: 3px 5px;
+    }
+
+    .leclerc-sidebar-title {
+      margin: 0 0 10px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #f47924;
+      font-size: 13px;
+      font-weight: bold;
+      color: #04578e;
+      text-align: center;
+    }
+
+    .leclerc-side-stat {
+      text-align: center;
+      padding: 12px;
+      background: linear-gradient(180deg, #fff, #fde0c8);
+      border-radius: 10px;
+      border: 1px solid #f47924;
+      margin-bottom: 10px;
+    }
+
+    .leclerc-side-stat strong {
+      display: block;
+      font-size: 20px;
+      color: #f47924;
+    }
+
+    .leclerc-cta {
+      display: block;
+      margin-top: 10px;
+      padding: 10px;
+      text-align: center;
+      background: linear-gradient(180deg, #f47924, #04578e);
+      color: #fff;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .leclerc-cta:hover { filter: brightness(1.08); }
+
+    /* Blog À propos (sobre, zones par thème) */
+    .apropos-blog {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      background: #eceef2;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 12px;
+      color: #333;
+      -webkit-user-select: text;
+      user-select: text;
+    }
+
+    .apropos-blog-hero {
+      padding: 14px 16px;
+      background: linear-gradient(180deg, #f7f9fc, #e8edf4);
+      border-bottom: 2px solid #b8c6d8;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .apropos-blog-hero h1 {
+      margin: 0 0 4px;
+      font-size: 20px;
+      color: #2a4a6e;
+    }
+
+    .apropos-blog-tagline {
+      margin: 0;
+      color: #555;
+      font-size: 11px;
+    }
+
+    .apropos-badge {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 3px 10px;
+      background: #dce6f2;
+      color: #2a4a6e;
+      font-weight: bold;
+      font-size: 10px;
+      border-radius: 10px;
+      border: 1px solid #b8c6d8;
+    }
+
+    .apropos-blog-layout {
+      display: flex;
+      gap: 12px;
+      padding: 12px;
+      align-items: flex-start;
+    }
+
+    .apropos-main { flex: 1; min-width: 0; }
+
+    .apropos-sidebar {
+      width: 200px;
+      flex-shrink: 0;
+    }
+
+    .apropos-box {
+      margin-bottom: 12px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.08);
+      color: #333;
+    }
+
+    .apropos-box--intro { border-color: #b8cce8; }
+    .apropos-box--intro .apropos-box-header {
+      background: linear-gradient(180deg, #e8f0f8, #fff);
+      border-bottom-color: #b8cce8;
+      color: #2a4a6e;
+    }
+
+    .apropos-box--culture { border-color: #dcc8b8; }
+    .apropos-box--culture .apropos-box-header {
+      background: linear-gradient(180deg, #f8f0ea, #fff);
+      border-bottom-color: #dcc8b8;
+      color: #6b4a32;
+    }
+
+    .apropos-box-header {
+      padding: 8px 12px;
+      border-bottom: 1px solid #ccc;
+      font-weight: bold;
+      font-size: 13px;
+    }
+
+    .apropos-box-body {
+      padding: 12px 14px;
+      line-height: 1.55;
+      font-size: 12px;
+    }
+
+    .apropos-box-body p { margin-bottom: 10px; }
+    .apropos-box-body p:last-child { margin-bottom: 0; }
+
+    .apropos-photo-trio {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 10px;
+      margin: 14px 0 0;
+      flex-wrap: wrap;
+    }
+
+    .apropos-photo-card {
+      flex-shrink: 0;
+      padding: 5px 5px 8px;
+      background: #fff;
+      border: 1px solid #c8d0da;
+      box-shadow: 1px 2px 6px rgba(42, 74, 110, 0.15);
+    }
+
+    .apropos-photo-card img {
+      display: block;
+      width: 100px;
+      height: 120px;
+      object-fit: cover;
+      cursor: pointer;
+    }
+
+    .apropos-photo-card--left {
+      transform: rotate(-4deg);
+    }
+
+    .apropos-photo-card--center {
+      transform: scale(1.06);
+      z-index: 2;
+      border-color: #8aa8c8;
+      box-shadow: 2px 4px 10px rgba(42, 74, 110, 0.2);
+    }
+
+    .apropos-photo-card--center img {
+      width: 112px;
+      height: 132px;
+    }
+
+    .apropos-photo-card--right {
+      transform: rotate(4deg);
+    }
+
+    .apropos-define-row {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      margin-top: 4px;
+    }
+
+    .apropos-define-text {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .apropos-define-visual {
+      flex-shrink: 0;
+      width: 300px;
+    }
+
+    .apropos-define-pile {
+      position: relative;
+      width: 280px;
+      height: 270px;
+      margin: 0 auto;
+    }
+
+    .apropos-pile-card {
+      position: absolute;
+      padding: 5px 5px 8px;
+      background: #fff;
+      border: 1px solid #c8d0da;
+      box-shadow: 2px 4px 10px rgba(42, 74, 110, 0.22);
+    }
+
+    .apropos-pile-card img {
+      display: block;
+      object-fit: cover;
+    }
+
+    .apropos-pile-card--tiakola {
+      left: 0;
+      top: 24px;
+      z-index: 1;
+      transform: rotate(-7deg);
+    }
+
+    .apropos-pile-card--tiakola img {
+      width: 140px;
+      height: 220px;
+    }
+
+    .apropos-pile-card--office {
+      left: 88px;
+      top: 0;
+      z-index: 2;
+      transform: rotate(5deg);
+    }
+
+    .apropos-pile-card--office img {
+      width: 130px;
+      height: 145px;
+    }
+
+    .apropos-pile-card--onepiece {
+      left: 155px;
+      top: 108px;
+      z-index: 3;
+      transform: rotate(-4deg);
+    }
+
+    .apropos-pile-card--onepiece img {
+      width: 130px;
+      height: 150px;
+    }
+
+    @media (max-width: 520px) {
+      .apropos-define-row {
+        flex-direction: column;
+      }
+
+      .apropos-define-visual {
+        width: 100%;
+      }
+
+      .apropos-define-pile {
+        transform: scale(0.92);
+        transform-origin: top center;
+      }
+    }
+
+    .cv-viewer-body {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      background: #6a6a6a;
+      padding: 8px;
+    }
+
+    .cv-viewer-body object {
+      flex: 1;
+      width: 100%;
+      min-height: 420px;
+      border: 2px inset #c0c0c0;
+      background: #fff;
+    }
+
+    .apropos-sidebar-title {
+      margin: 0 0 10px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #b8c6d8;
+      font-size: 13px;
+      font-weight: bold;
+      color: #2a4a6e;
+      text-align: center;
+    }
+
+    .apropos-side-stat {
+      text-align: center;
+      padding: 10px;
+      background: #fff;
+      border: 1px solid #b8c6d8;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 11px;
+      color: #444;
+    }
+
+    .apropos-side-stat strong {
+      display: block;
+      color: #2a4a6e;
+      font-size: 14px;
+    }
+
+    .apropos-cta {
+      display: block;
+      margin-top: 10px;
+      padding: 10px;
+      text-align: center;
+      background: linear-gradient(180deg, #5a8ab8, #2a4a6e);
+      color: #fff;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 12px;
+      border: 1px solid #2a4a6e;
+    }
+
+    .apropos-cta:hover { filter: brightness(1.06); }
+
+    .placeholder-note {
+      padding: 24px;
+      color: #666;
+      font-style: italic;
+      text-align: center;
+    }
+
+    .file-item p {
+      font-size: 12px;
+      line-height: 1.35;
+      color: #000;
+    }
+
+    .file-item.file-item--projet img.projet-thumb {
+      width: 64px;
+      height: auto;
+      max-height: 88px;
+      object-fit: contain;
+      border: 1px solid #aca899;
+      background: #fff;
+      box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
+    }
+
+    .projet-showcase {
+      display: flex;
+      flex: 1;
+      gap: 18px;
+      min-height: 0;
+      padding: 14px 16px;
+      overflow-y: auto;
+      background: #fff;
+      -webkit-user-select: text;
+      user-select: text;
+    }
+
+    .projet-showcase img {
+      flex-shrink: 0;
+      max-width: 48%;
+      max-height: 420px;
+      object-fit: contain;
+      border: 1px solid #aca899;
+      box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .projet-showcase-text {
+      flex: 1;
+      min-width: 0;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #000;
+    }
+
+    .projet-title-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 10px;
+      margin-bottom: 12px;
+    }
+
+    .projet-title-row h2 {
+      margin: 0;
+      font-size: 16px;
+      color: #2151a5;
+    }
+
+    .projet-title-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      align-items: center;
+    }
+
+    .projet-showcase-text h2 {
+      margin: 0 0 12px;
+      font-size: 16px;
+      color: #2151a5;
+    }
+
+    .projet-media-col {
+      flex-shrink: 0;
+      max-width: 48%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .projet-media-col .projet-main-media {
+      max-width: 100%;
+      max-height: 360px;
+    }
+
+    .projet-video {
+      width: 100%;
+      max-width: 320px;
+      border: 1px solid #aca899;
+      background: #000;
+    }
+
+    .lazy-video-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .lazy-video-wrap--tiktok {
+      max-width: none;
+    }
+
+    .lazy-video-wrap .lazy-video {
+      display: block;
+      width: 100%;
+    }
+
+    .lazy-video-wrap--projet .lazy-video {
+      max-width: 320px;
+    }
+
+    .lazy-video-play {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin: 0;
+      padding: 8px;
+      border: none;
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      cursor: pointer;
+      font-family: Tahoma, Verdana, sans-serif;
+      font-size: 11px;
+      z-index: 1;
+    }
+
+    .lazy-video-play-icon {
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .lazy-video-wrap.is-loaded .lazy-video-play {
+      display: none;
+    }
+
+    .projet-pdf-view {
+      width: 100%;
+      min-width: 260px;
+      height: 380px;
+      border: 1px solid #aca899;
+      background: #eee;
+    }
+
+    .projet-fs-btn {
+      padding: 3px 8px;
+      border: 1px solid #7f9db9;
+      border-radius: 3px;
+      background: linear-gradient(180deg, #f8f8f8, #d4d0c8);
+      font-family: Tahoma, sans-serif;
+      font-size: 10px;
+      line-height: 1.3;
+      color: #000;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .projet-fs-btn:hover {
+      background: #e8f4fc;
+      border-color: #316ac5;
+    }
+
+    .file-item.file-item--projet .projet-thumb-wrap {
+      display: block;
+      width: 64px;
+      height: 80px;
+      margin: 0 auto 8px;
+      cursor: pointer;
+      overflow: hidden;
+      border: 1px solid #aca899;
+      background: #fff;
+      box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
+    }
+
+    .file-item.file-item--projet .projet-thumb-wrap object,
+    .file-item.file-item--projet .projet-thumb-wrap img {
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      object-fit: contain;
+    }
+
+    .projet-fullscreen {
+      position: fixed;
+      inset: 0;
+      z-index: 30000;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px 20px;
+      background: rgba(0, 0, 0, 0.92);
+    }
+
+    .projet-fullscreen.open {
+      display: flex;
+    }
+
+    .projet-fullscreen-close {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      padding: 8px 16px;
+      border: 1px solid #fff;
+      background: #c03020;
+      color: #fff;
+      font-family: Tahoma, sans-serif;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .projet-fullscreen-content {
+      max-width: 96vw;
+      max-height: 88vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .projet-fullscreen-content img {
+      max-width: 96vw;
+      max-height: 88vh;
+      object-fit: contain;
+      box-shadow: 0 0 24px rgba(0, 0, 0, 0.5);
+    }
+
+    .projet-fullscreen-content video {
+      max-width: 96vw;
+      max-height: 88vh;
+      border: 2px solid #666;
+    }
+
+    .projet-fullscreen-content iframe,
+    .projet-fullscreen-content object {
+      width: 90vw;
+      height: 88vh;
+      max-width: 1100px;
+      border: 2px solid #666;
+      background: #fff;
+    }
+
+    .content-pane {
+      flex: 1;
+      padding: 14px 16px;
+      overflow-y: auto;
+      background: #fff;
+      font-size: 12px;
+      line-height: 1.55;
+      color: #000;
+      -webkit-user-select: text;
+      user-select: text;
+    }
+
+    .content-pane h2 {
+      margin: 12px 0 8px;
+      font-size: 13px;
+      color: #2151a5;
+    }
+
+    .content-pane h2:first-child { margin-top: 0; }
+
+    .content-pane ul {
+      margin: 0 0 10px 18px;
+    }
+
+    .content-pane li { margin-bottom: 5px; }
+
+    .content-pane a { color: #2151a5; }
+
+    .statusbar {
+      display: flex;
+      gap: 20px;
+      height: 22px;
+      padding: 0 8px;
+      align-items: center;
+      background: #ece9d8;
+      border-top: 1px solid #fff;
+      font-size: 11px;
+    }
+
+    #taskbar {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 20000;
+      display: flex;
+      height: 30px;
+      align-items: center;
+      padding: 0 2px;
+      background: linear-gradient(180deg, #3a8fd4 0%, #2566b8 6%, #1e5aa8 50%, #184a90 100%);
+      border-top: 1px solid #5cadf0;
+    }
+
+    #start-btn {
+      display: flex;
+      height: 26px;
+      min-width: 92px;
+      align-items: center;
+      gap: 7px;
+      margin: 0 4px;
+      padding: 0 14px 0 8px;
+      border: none;
+      border-radius: 0 14px 14px 0;
+      background: linear-gradient(180deg, #5ee870 0%, #2db84a 35%, #1e9a38 70%, #168030 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 1px 1px 2px rgba(0, 0, 0, 0.25);
+      color: #fff;
+      font-size: 13px;
+      font-style: italic;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #start-btn:hover { filter: brightness(1.08); }
+
+    #start-btn .start-lubin-logo {
+      width: 56px;
+      height: 56px;
+      flex-shrink: 0;
+      object-fit: contain;
+      background: transparent;
+    }
+
+    #taskbar-windows {
+      display: flex;
+      flex: 1;
+      gap: 4px;
+      overflow-x: auto;
+      padding: 2px 0;
+    }
+
+    .taskbar-btn {
+      display: none;
+      max-width: 170px;
+      height: 24px;
+      padding: 0 10px;
+      overflow: hidden;
+      border: 1px solid #1a4a80;
+      border-radius: 2px;
+      background: linear-gradient(180deg, #5a9fd4, #3a7fb8);
+      color: #fff;
+      font-family: Tahoma, sans-serif;
+      font-size: 11px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .taskbar-btn.on-taskbar { display: block; }
+
+    .taskbar-btn.focused {
+      border-color: #aca899;
+      background: linear-gradient(180deg, #fff 0%, #e8f0f8 50%, #d0e8f8 100%);
+      color: #000;
+      box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.12);
+    }
+
+    #tray {
+      display: flex;
+      height: 24px;
+      align-items: center;
+      gap: 8px;
+      padding: 0 10px;
+      border: 1px solid #0a6ab8;
+      border-radius: 2px;
+      background: linear-gradient(180deg, #18a0f0, #0990e8 50%, #0780d8);
+      color: #fff;
+      font-size: 11px;
+    }
+
+    .tray-audio-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin: 0;
+      padding: 0 3px;
+      border: none;
+      background: transparent;
+      color: inherit;
+      font-size: 14px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .tray-audio-btn:hover {
+      filter: brightness(1.2);
+    }
+
+    .tray-audio-btn.is-muted::after {
+      content: "";
+      position: absolute;
+      left: 1px;
+      right: 1px;
+      top: 50%;
+      height: 2px;
+      background: #fff;
+      box-shadow: 0 0 1px rgba(0, 30, 60, 0.8);
+      transform: rotate(-38deg);
+      pointer-events: none;
+    }
+
+    #start-menu {
+      position: fixed;
+      bottom: 30px;
+      left: 0;
+      z-index: 20001;
+      display: none;
+      width: 290px;
+      border: 2px solid #0054e3;
+      background: #fff;
+      box-shadow: 4px 4px 14px rgba(0, 0, 0, 0.4);
+    }
+
+    #start-menu.open { display: block; }
+
+    .start-header {
+      padding: 14px 16px;
+      background: linear-gradient(90deg, #3a6ea5, #5b9fd4);
+      color: #fff;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .start-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 18px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .start-item:hover {
+      background: #316ac5;
+      color: #fff;
+    }
+
+    .start-footer {
+      padding: 8px 14px;
+      border-top: 1px solid #aca899;
+      background: #d4d0c8;
+      text-align: right;
+    }
+
+    .start-footer button {
+      padding: 4px 18px;
+      border: 1px solid #808080;
+      background: linear-gradient(180deg, #f8f8f8, #d4d0c8);
+      font-family: Tahoma, sans-serif;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .detail-popup {
+      position: fixed;
+      z-index: 15000;
+      display: none;
+      width: 400px;
+      border: 2px solid #0054e3;
+      background: #fff;
+      box-shadow: 3px 3px 12px rgba(0, 0, 0, 0.35);
+    }
+
+    .detail-popup.open { display: block; }
+
+    .detail-popup .titlebar { cursor: default; }
+
+    .detail-popup .content-pane { max-height: 220px; }
+
+    @media (max-width: 700px) {
+      .xp-window {
+        width: 96vw !important;
+        min-width: 0;
+        left: 2vw !important;
+      }
+
+      .sidebar { width: 130px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="desktop">
+    <div class="desktop-icon" data-win="experience" style="top: 16px; left: 16px;">
+      <div class="icon-slot"><img src="assets/xp-icons/briefcase-0.png" alt="" loading="lazy" /></div>
+      <span class="desktop-label">Mon expérience</span>
+    </div>
+    <div class="desktop-icon" data-win="mesprojets" style="top: 16px; left: 132px;">
+      <div class="icon-slot"><img src="assets/xp-icons/directory_closed-4.png" alt="" loading="lazy" /></div>
+      <span class="desktop-label">Mes projets</span>
+    </div>
+    <div class="desktop-icon icon-youtube-wrap" data-win="youtube" style="top: 16px; left: 248px;">
+      <div class="icon-slot"><img class="icon-youtube" src="assets/logo%20youtube.png" alt="YouTube" loading="lazy" /></div>
+      <span class="desktop-label">YouTube</span>
+    </div>
+    <div class="desktop-icon" data-win="formation" style="top: 132px; left: 16px;">
+      <div class="icon-slot"><img src="assets/logo%20info%20com%20.png" alt="" loading="lazy" /></div>
+      <span class="desktop-label">Ma Formation</span>
+    </div>
+    <div class="desktop-icon" data-win="competences" style="top: 132px; left: 132px;">
+      <div class="icon-slot"><img src="assets/ico%CC%82ne%20comp%C3%A9tence.png" alt="" loading="lazy" /></div>
+      <span class="desktop-label">Compétences</span>
+    </div>
+    <div class="desktop-icon" data-win="contact" style="top: 248px; left: 16px;">
+      <div class="icon-slot"><img src="assets/Icone%20contact.png" alt="" loading="lazy" /></div>
+      <span class="desktop-label">Contact</span>
+    </div>
+    <div class="desktop-icon icon-ld-logo-wrap" data-win="apropos" style="top: 248px; left: 132px;">
+      <div class="icon-slot"><img src="assets/logo%20noir%20ld.png" alt="" loading="lazy" /></div>
+      <span class="desktop-label">À propos de moi</span>
+    </div>
+    <div class="desktop-icon" data-win="cv" style="top: 132px; left: 248px;">
+      <div class="icon-slot">
+        <img src="assets/Photo%20CV%20%20DAUL%20Lubin.jpg" alt="" loading="lazy" />
+      </div>
+      <span class="desktop-label">CV</span>
+    </div>
+  </div>
+
+  <!-- Mon expérience -->
+  <div id="win-experience" class="xp-window" data-id="experience" style="left: 70px; top: 36px; width: 660px; height: 440px;">
+    <div class="titlebar">
+      <img class="titlebar-icon" src="assets/xp-icons/briefcase-0.png" alt="" loading="lazy" />
+      <span class="titlebar-text">Mon expérience - C:\Documents\Lubin\Experience</span>
+      <div class="titlebar-buttons">
+        <button type="button" class="btn-min" title="Réduire">_</button>
+        <button type="button" class="btn-max" title="Agrandir">□</button>
+        <button type="button" class="btn-close" title="Fermer">×</button>
+      </div>
+    </div>
+    <div class="menubar"><span>Fichier</span><span>Édition</span><span>Affichage</span><span>Favoris</span><span>? Aide</span></div>
+    <div class="explorer-body">
+      <div class="sidebar">
+        <div class="task-panel">
+          <h3>Autres tâches</h3>
+          <ul>
+            <li><a data-open="mesprojets">Ouvrir Mes projets</a></li>
+            <li><a data-open="formation">Ouvrir Ma Formation</a></li>
+            <li><a data-open="contact">Ouvrir Contact</a></li>
+          </ul>
+        </div>
+        <div class="task-panel">
+          <h3>Infos dossier</h3>
+          <ul>
+            <li>4 expériences</li>
+            <li>Stages &amp; associatif</li>
+          </ul>
+        </div>
+      </div>
+      <div class="file-area">
+        <div class="file-item" data-detail="leclerc">
+          <img class="brand-icon" src="assets/logo%20leclerc.png" alt="E.Leclerc" loading="lazy" />
+          <p>Stage E.Leclerc<br />Community Manager</p>
+        </div>
+        <div class="file-item" data-detail="jpo">
+          <img class="brand-icon" src="assets/JPO.png" alt="JPO" loading="lazy" />
+          <p>Journée Portes<br />Ouvertes IUT</p>
+        </div>
+        <div class="file-item" data-detail="ferco">
+          <img class="brand-icon brand-icon--wide" src="assets/logo%20ferco.png" alt="Ferco SAS" loading="lazy" />
+          <p>Stage à<br />Ferco SAS</p>
+        </div>
+        <div class="file-item" data-detail="conseil">
+          <img class="brand-icon" src="assets/iut%20conseil.png" alt="Conseil d'Institut IUT" loading="lazy" />
+          <p>Conseil<br />d'Institut</p>
+        </div>
+      </div>
+    </div>
+    <div class="statusbar"><span>4 objet(s)</span><span>Lubin DAUL - Portfolio</span></div>
+  </div>
+
+  <!-- Mes projets (créations / documents) -->
+  <div id="win-mesprojets" class="xp-window" data-id="mesprojets" style="left: 100px; top: 50px; width: 600px; height: 400px;">
+    <div class="titlebar">
+      <img class="titlebar-icon" src="assets/xp-icons/directory_open_cabinet-0.png" alt="" loading="lazy" />
+      <span class="titlebar-text">Mes projets - C:\Documents\Lubin\Projets</span>
+      <div class="titlebar-buttons">
+        <button type="button" class="btn-min" title="Réduire">_</button>
+        <button type="button" class="btn-max" title="Agrandir">□</button>
+        <button type="button" class="btn-close" title="Fermer">×</button>
+      </div>
+    </div>
+    <div class="menubar"><span>Fichier</span><span>Édition</span><span>Affichage</span><span>Favoris</span></div>
+    <div class="explorer-body">
+      <div class="sidebar">
+        <div class="task-panel">
+          <h3>Dossier projets</h3>
+          <ul>
+            <li>Créations graphiques</li>
+            <li>Supports com'</li>
+            <li>Le Corbeau</li>
+            <li>Affiche Tintin</li>
+            <li>La peur du temps</li>
+            <li>Affiche Maxence</li>
+            <li>Affiche Matrix LDC</li>
+            <li>Affiche Olise</li>
+          </ul>
+        </div>
+        <div class="task-panel">
+          <h3>Liens</h3>
+          <ul>
+            <li><a data-open="experience">Voir Mon expérience</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="file-area">
+        <div class="file-item file-item--projet" data-open-projet="corbeau">
+          <span class="projet-thumb-wrap" aria-hidden="true">
+            <img class="projet-thumb" src="assets/Affiche%20GIG%20DAUL%20Lubin%202P1.png" alt="" loading="lazy" />
+          </span>
+          <p>Le Corbeau</p>
+        </div>
+        <div class="file-item file-item--projet" data-open-projet="tintin">
+          <span class="projet-thumb-wrap" aria-hidden="true">
+            <img class="projet-thumb" src="assets/affiche%20tintin.png" alt="" loading="lazy" />
+          </span>
+          <p>Affiche<br />Tintin</p>
+        </div>
+        <div class="file-item file-item--projet" data-open-projet="peurtemps">
+          <span class="projet-thumb-wrap" aria-hidden="true">
+            <img class="projet-thumb" src="assets/La%20peur%20du%20temps%20.jpg" alt="" loading="lazy" />
+          </span>
+          <p>La peur<br />du temps</p>
+        </div>
+        <div class="file-item file-item--projet" data-open-projet="maxence">
+          <span class="projet-thumb-wrap" aria-hidden="true">
+            <img class="projet-thumb" src="assets/Affiche%20Maxence.png" alt="" loading="lazy" />
+          </span>
+          <p>Affiche<br />Maxence</p>
+        </div>
+        <div class="file-item file-item--projet" data-open-projet="matrixldc">
+          <span class="projet-thumb-wrap" aria-hidden="true">
+            <img class="projet-thumb" src="assets/Affiche%20Matrix%20LDC_.png" alt="" loading="lazy" />
+          </span>
+          <p>Affiche Matrix<br />LDC</p>
+        </div>
+        <div class="file-item file-item--projet" data-open-projet="olise">
+          <span class="projet-thumb-wrap" aria-hidden="true">
+            <img class="projet-thumb" src="assets/Affiche%20Olise_.png" alt="" loading="lazy" />
+          </span>
+          <p>Affiche<br />Olise</p>
+        </div>
+      </div>
+    </div>
+    <div class="statusbar"><span>6 projets</span><span>Dossier créatif</span></div>
+  </div>
+
+  <!-- Le Corbeau - Mes projets -->
+  <div id="win-corbeau" class="xp-window" data-id="corbeau" style="left: 120px; top: 48px; width: 760px; height: 520px;">
+    <div class="titlebar">
+      <img class="titlebar-icon" src="assets/xp-icons/html-0.png" alt="" loading="lazy" />
+      <span class="titlebar-text">Le Corbeau - Affiche</span>
+      <div class="titlebar-buttons">
+        <button type="button" class="btn-min" title="Réduire">_</button>
+        <button type="button" class="btn-max" title="Agrandir la fenêtre">□</button>
+        <button type="button" class="btn-close" title="Fermer">×</button>
+      </div>
+    </div>
+    <div class="menubar"><span>Fichier</span><span>Édition</span><span>Affichage</span></div>
+    <div class="projet-showcase">
+      <div class="projet-media-col">
+        <img class="projet-main-media" src="assets/Affiche%20GIG%20DAUL%20Lubin%202P1.png" alt="Affiche Le Corbeau - Lubin DAUL" loading="lazy" />
+        <div class="lazy-video-wrap lazy-video-wrap--projet">
+          <video class="projet-video lazy-video" controls preload="none" data-src="assets/Le%20corbeau%20vide%CC%81o.mp4" poster="assets/Affiche%20GIG%20DAUL%20Lubin%202P1.png" title="Le Corbeau - animation"></video>
+          <button type="button" class="lazy-video-play" aria-label="Lire l'animation Le Corbeau"><span class="lazy-video-play-icon" aria-hidden="true">▶</span><span class="lazy-video-play-label">Lire la vidéo</span></button>
+        </div>
+      </div>
+      <div class="projet-showcase-text">
+        <div class="projet-title-row">
+          <h2>Le Corbeau</h2>
+          <div class="projet-title-actions">
+            <button type="button" class="projet-fs-btn" data-fs-src="assets/Affiche%20GIG%20DAUL%20Lubin%202P1.png" data-fs-type="image">Agrandir l'affiche</button>
+            <button type="button" class="projet-fs-btn" data-fs-src="assets/Le%20corbeau%20vide%CC%81o.mp4" data-fs-type="video">Agrandir la vidéo</button>
+          </div>
+        </div>
+        <p>Ce visuel est une <strong>réinterprétation de l'affiche</strong> du film <em>Le Corbeau</em>, sorti en <strong>1943</strong> et réalisé par <strong>Henri-Georges Clouzot</strong>.</p>
+        <p>Ce film est à l'origine de l'expression <strong>« un corbeau »</strong>, utilisée pour désigner une personne qui envoie des lettres anonymes afin de dénoncer autrui.</p>
+        <h2 style="margin-top:14px;font-size:13px;">Comment je m'y suis pris</h2>
+        <p>L'affiche a été réalisée sur <strong>Adobe Illustrator</strong>, <strong>sans intelligence artificielle</strong>. Une version a ensuite été travaillée sur <strong>Adobe Express</strong> pour l'animer simplement (vidéo ci-contre).</p>
+        <p style="margin-top:12px;color:#555;font-size:11px;">Projet graphique - BUT Info-Com</p>
+      </div>
+    </div>
+    <div class="statusbar"><span>Affiche + vidéo</span><span>Lubin DAUL</span></div>
+  </div>
+
+  <!-- Affiche Tintin - Mes projets -->
+  <div id="win-tintin" class="xp-window" data-id="tintin" style="left: 140px; top: 56px; width: 760px; height: 520px;">
+    <div class="titlebar">
+      <img class="titlebar-icon" src="assets/xp-icons/html-0.png" alt="" loading="lazy" />
+      <span class="titlebar-text">Affiche Tintin - Promotion produit</span>
+      <div class="titlebar-buttons">
+        <button type="button" class="btn-min" title="Réduire">_</button>
+        <button type="button" class="btn-max" title="Agrandir la fenêtre">□</button>
+        <button type="button" class="btn-close" title="Fermer">×</button>
+      </div>
+    </div>
+    <div class="menubar"><span>Fichier</span><span>Édition</span><span>Affichage</span></div>
+    <div class="projet-showcase">
+      <div class="projet-media-col">
+        <img class="projet-main-media" src="assets/affiche%20tintin.png" alt="Affiche Tintin - Lubin DAUL" loading="lazy" />
+      </div>
+      <div class="projet-showcase-text">
+        <div class="projet-title-row">
+          <h2>Affiche Tintin</h2>
+          <div class="projet-title-actions">
+            <button type="button" class="projet-fs-btn" data-fs-src="assets/affiche%20tintin.png" data-fs-type="image">Agrandir l'affiche</button>
+          </div>
+        </div>
+        <p>Ce projet consistait à imaginer une <strong>collaboration entre un produit et une entreprise</strong> qui n'ont, à la base, aucun lien entre eux.</p>
+        <p>Le choix s'est porté sur <strong>Tintin</strong> et l'un de ses albums les plus connus, <em>Tintin et les Oranges bleues</em>, pour créer une <strong>boisson intrigante à la couleur bleue</strong>.</p>
+        <p>Il s'agit donc d'une <strong>affiche promotionnelle</strong> du produit. <strong>Aldi</strong> a été choisi comme <strong>distributeur du produit</strong>, pour une <strong>cohérence graphique</strong> avec l'identité de l'enseigne.</p>
+        <h2 style="margin-top:14px;font-size:13px;">Réalisation</h2>
+        <p>Travail réalisé sur <strong>Adobe Photoshop</strong> et <strong>Adobe Illustrator</strong>.</p>
+        <p style="margin-top:12px;color:#555;font-size:11px;">Projet graphique - BUT Info-Com</p>
+      </div>
+    </div>
+    <div class="statusbar"><span>Affiche PNG</span><span>Lubin DAUL</span></div>
+  </div>
+
+  <!-- La peur du temps - Mes projets -->
+  <div id="win-peurtemps" class="xp-window" data-id="peurtemps" style="left: 160px; top: 64px; width: 760px; height: 520px;">
+    <div class="titlebar">
+      <img class="titlebar-icon" src="assets/xp-icons/html-0.png" alt="" loading="lazy" />
+      <span class="titlebar-text">La peur du temps - Photographie</span>
+      <div class="titlebar-buttons">
+        <button type="button" class="btn-min" title="Réduire">_</button>
+        <button type="button" class="btn-max" title="Agrandir la fenêtre">□</button>
+        <button type="button" class="btn-close" title="Fermer">×</button>
+      </div>
+    </div>
+    <div class="menubar"><span>Fichier</span><span>Édition</span><span>Affichage</span></div>
+    <div class="projet-showcase">
+      <div class="projet-media-col">
+        <img class="projet-main-media" src="assets/La%20peur%20du%20temps%20.jpg" alt="La peur du temps - Lubin DAUL" loading="lazy" />
+      </div>
+      <div class="projet-showcase-text">
+        <div class="projet-title-row">
+          <h2>La peur du temps</h2>
+          <div class="projet-title-actions">
+            <button type="button" class="projet-fs-btn" data-fs-src="assets/La%20peur%20du%20temps%20.jpg" data-fs-type="image">Agrandir l'image</button>
+          </div>
+        </div>
+        <p>Travail réalisé sur <strong>Lightroom</strong> et <strong>Photoshop</strong>. J'ai souhaité représenter une émotion intangible : la <strong>peur du temps</strong>.</p>
+        <p>Une émotion que l'on ne peut ni voir ni toucher, mais que l'on peut ressentir. Le projet s'appuie sur différents éléments liés au temps qui nous entoure et peut parfois créer un sentiment d'enfermement, poussant au repli sur soi.</p>
+        <p style="margin-top:12px;color:#555;font-size:11px;">Projet photographie - BUT Info-Com</p>
+      </div>
+    </div>
+    <div class="statusbar"><span>Photographie</span><span>Lubin DAUL</span></div>
+  </div>
+
+  <!-- Affiche Maxence - Mes projets -->
+  <div id="win-maxence" class="xp-window" data-id="maxence" style="left: 170px; top: 70px; width: 760px; height: 520px;">
+    <div class="titlebar">
+      <img class="titlebar-icon" src="assets/xp-icons/html-0.png" alt="" loading="lazy" />
+      <span class="titlebar-text">Affiche Maxence - Photoshop</span>
+      <div class="titlebar-buttons">
+        <button type="button" class="btn-min" title="Réduire">_</button>
+        <button type="button" class="btn-max" title="Agrandir la fenêtre">□</button>
+        <button type="button" class="btn-close" title="Fermer">×</button>
+      </div>
+    </div>
+    <div class="menubar"><span>Fichier</span><span>Édition</span><span>Affichage</span></div>
+    <div class="projet-showcase">
+      <div class="projet-media-col">
+        <img class="projet-main-media" src="assets/Affiche%20Maxence.png" alt="Affiche Maxence - Lubin DAUL" loading="lazy" />
+      </div>
+      <div class="projet-showcase-text">
+        <div class="projet-title-row">
+          <h2>Affiche Maxence</h2>
+          <div class="projet-title-actions">
+            <button type="button" class="projet-fs-btn" data-fs-src="assets/Affiche%20Maxence.png" data-fs-type="image">Agrandir l'affiche</button>
+          </div>
+        </div>
+        <p>Affiche réalisée sur <strong>Adobe Photoshop</strong> pour un ami.</p>
+        <p>Les photos sources sont actuellement de qualité limitée, ce qui impacte le rendu visuel final. Une amélioration est prévue dès réception de visuels de meilleure qualité.</p>
+        <p style="margin-top:12px;color:#555;font-size:11px;">Projet personnel - création graphique</p>
+      </div>
+    </div>
+    <div class="statusbar"><span>Affiche Photoshop</span><span>Lubin DAUL</span></div>
+  </div>
+
+  <!-- Affiche Matrix LDC - Mes projets -->
+  <div id="win-matrixldc" class="xp-window" data-id="matrixldc" style="left: 180px; top: 76px; width: 760px; height: 520px;">
+    <div class="titlebar">
+      <img class="titlebar-icon" src="assets/xp-icons/html-0.png" alt="" loading="lazy" />
+      <span class="titlebar-text">Affiche Matrix LDC - Finale 2026</span>
+      <div class="titlebar-buttons">
+        <button type="button" class="btn-min" title="Réduire">_</button>
+        <button type="button" class="btn-max" title="Agrandir la fenêtre">□</button>
+        <button type="button" class="btn-close" title="Fermer">×</button>
+      </div>
+    </div>
+    <div class="menubar"><span>Fichier</span><span>Édition</span><span>Affichage</span></div>
+    <div class="projet-showcase">
+      <div class="projet-media-col">
+        <img class="projet-main-media" src="assets/Affiche%20Matrix%20LDC_.png" alt="Affiche Matrix LDC - Lubin DAUL" loading="lazy" />
+      </div>
+      <div class="projet-showcase-text">
+        <div class="projet-title-row">
+          <h2>Affiche Matrix LDC</h2>
+          <div class="projet-title-actions">
+            <button type="button" class="projet-fs-btn" data-fs-src="assets/Affiche%20Matrix%20LDC_.png" data-fs-type="image">Agrandir l'affiche</button>
+          </div>
+        </div>
+        <p>Affiche réalisée pour la finale de la Ligue des Champions 2026, conçue sur <strong>Adobe Photoshop</strong>.</p>
+        <p>Le visuel reprend la référence iconique des pilules rouge et bleue de Matrix : un parallèle avec les couleurs d'Arsenal (rouge) et du PSG (bleu).</p>
+        <p>Le concept insiste sur le <strong>choix final irréversible</strong> : comme dans Matrix, une seule décision est possible, et une seule équipe peut soulever le trophée.</p>
+        <p style="margin-top:12px;color:#555;font-size:11px;">Projet personnel - affiche événementielle</p>
+      </div>
+    </div>
+    <div class="statusbar"><span>Affiche Photoshop</span><span>Lubin DAUL</span></div>
+  </div>
+
+  <!-- Affiche Olise - Mes projets -->
+  <div id="win-olise" class="xp-window" data-id="olise" style="left: 190px; top: 82px; width: 760px; height: 520px;">
+    <div class="titlebar">
+      <img class="titlebar-icon" src="assets/xp-icons/html-0.png" alt="" loading="lazy" />
+      <span class="titlebar-text">Affiche Olise - Photoshop</span>
+      <div class="titlebar-buttons">
+        <button type="button" class="btn-min" title="Réduire">_</button>
+        <button type="button" class="btn-max" title="Agrandir la fenêtre">□</button>
+        <button type="button" class="btn-close" title="Fermer">×</button>
+      </div>
+    </div>
+    <div class="menubar"><span>Fichier</span><span>Édition</span><span>Affichage</span></div>
+    <div class="projet-showcase">
+      <div class="projet-media-col">
+        <img class="projet-main-media" src="assets/Affiche%20Olise_.png" alt="Affiche Olise - Lubin DAUL" loading="lazy" />
+      </div>
+      <div class="projet-showcase-text">
+        <div class="projet-title-row">
+          <h2>Affiche Olise</h2>
+          <div class="projet-title-actions">
+            <button type="button" class="projet-fs-btn" data-fs-src="assets/Affiche%20Olise_.png" data-fs-type="image">Agrandir l'affiche</button>
+          </div>
+        </div>
+        <p>Affiche réalisée sur <strong>Adobe Photoshop</strong> pour mettre en avant un joueur qui a explosé ces dernières années, d'où le titre choisi.</p>
+        <p>Visuel volontairement <strong>simple</strong>, à l'image du joueur, connu pour sa discrétion et son surnom <strong>Mr. Nonchalant</strong>.</p>
+        <p style="margin-top:12px;color:#555;font-size:11px;">Projet personnel - affiche sport</p>
+      </div>
+    </div>
+    <div class="statusbar"><span>Affiche Photoshop</span><span>Lubin DAUL</span></div>
+  </div>
+
+  <!-- CV -->
+  <div id="win-cv" class="xp-window" data-id="cv" style="left: 100px; top: 40px; width: 780px; height: 560px;">
+    <div class="titlebar">
+      <img class="titlebar-icon" src="assets/xp-icons/document-0.png" alt="" loading="lazy" />
+      <span class="titlebar-text">CV - Lubin DAUL.pdf</span>
+      <div class="titlebar-buttons">
+        <button type="button" class="btn-min" title="Réduire">_</button>
+        <button type="button" class="btn-max" title="Agrandir">□</button>
+        <button type="button" class="btn-close" title="Fermer">×</button>
+      </div>
+    </div>
+    <div class="menubar"><span>Fichier</span><span>Édition</span><span>Affichage</span></div>
+    <div class="cv-viewer-body">
+      <p style="margin:0 0 6px;text-align:right;">
+        <button type="button" class="projet-fs-btn" data-fs-src="assets/CV%20Cre%CC%81a%20DAUL%20Lubin.pdf" data-fs-type="pdf">Plein écran</button>
+      </p>
+      <object data="assets/CV%20Cre%CC%81a%20DAUL%20Lubin.pdf" type="application/pdf" title="CV Lubin DAUL">
+        <p style="padding:12px;">Impossible d'afficher le PDF ici. <a href="assets/CV%20Cre%CC%81a%20DAUL%20Lubin.pdf" target="_blank" rel="noopener noreferrer">Ouvrir le CV</a></p>
+      </object>
+    </div>
+    <div class="statusbar"><span>CV Créa DAUL Lubin</span><span>Lubin DAUL</span></div>
+  </div>
+
+  <div id="projet-fullscreen" class="projet-fullscreen" aria-hidden="true">
+    <button type="button" class="projet-fullscreen-close" id="projet-fullscreen-close">× Fermer</button>
+    <div class="projet-fullscreen-content" id="projet-fullscreen-content"></div>
+  </div>
+
+  <!-- Blog JPO -->
+  <div id="win-jpoblog" class="xp-window" data-id="jpoblog" style="left: 90px; top: 40px; width: 780px; height: 540px;">
+    <div class="titlebar">
+      <img class="titlebar-icon" src="assets/JPO.png" alt="" loading="lazy" />
+      <span class="titlebar-text">JPO IUT - Blog - Internet Explorer</span>
+      <div class="titlebar-buttons">
+        <button type="button" class="btn-min" title="Réduire">_</button>
+        <button type="button" class="btn-max" title="Agrandir">□</button>
+        <button type="button" class="btn-close" title="Fermer">×</button>
+      </div>
+    </div>
+    <div class="menubar"><span>Fichier</span><span>Édition</span><span>Affichage</span><span>Favoris</span></div>
+    <div class="jpo-blog">
+      <header class="jpo-blog-hero">
+        <img class="jpo-logo-main" src="assets/JPO.png" alt="JPO" loading="lazy" />
+        <div>
+          <h1>Journée Portes Ouvertes - BUT Info-Com</h1>
+          <p style="color:#555;margin:0;">IUT Besançon-Vesoul · Promotion de la formation</p>
+          <span class="jpo-role-badge">Mon rôle : Trésorier</span>
+        </div>
+      </header>
+      <div class="jpo-blog-layout">
+        <main class="jpo-main">
+          <div class="jpo-box">
+            <div class="jpo-box-header">En bref</div>
+            <div class="jpo-box-body">
+              <p>Cette année, j'ai participé à l'organisation de la Journée Portes Ouvertes de la formation au sein d'une <strong>équipe de 8 étudiants</strong>. Nous avons accueilli <strong>220 visiteurs</strong> et préparé plusieurs salles thématiques pour présenter la formation et ses projets.</p>
+              <p>Le projet ne s'est pas limité à la JPO : salons d'orientation, immersions lycéens et actions de communication tout au long de l'année.</p>
+              <div class="jpo-media">
+                <img src="assets/JPO%20e%CC%81quipe.png" alt="Équipe JPO" loading="lazy" />
+                <p class="jpo-caption">L'équipe organisatrice</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="jpo-box">
+            <div class="jpo-box-header">La JPO : un projet qui commence bien avant le jour J</div>
+            <div class="jpo-box-body">
+              <p>La Journée Portes Ouvertes ne se résume pas au seul jour de l'événement. Une grande partie du travail a été réalisée en amont.</p>
+              <ul>
+                <li>Participation à des salons d'orientation</li>
+                <li>Présentations dans les lycées</li>
+                <li>Immersions à l'IUT pour faire découvrir la formation</li>
+              </ul>
+              <div class="jpo-media-grid">
+                <div>
+                  <img src="assets/JPO%20salon.png" alt="Salon orientation" loading="lazy" />
+                  <p class="jpo-caption">Salon d'orientation</p>
+                </div>
+                <div>
+                  <img src="assets/JPO%20pre%CC%81sentation.png" alt="Présentation lycée" loading="lazy" />
+                  <p class="jpo-caption">Présentation dans les lycées</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="jpo-box">
+            <div class="jpo-box-header">Organisation &amp; communication</div>
+            <div class="jpo-box-body">
+              <p>L'anticipation et la communication ont été centrales : informer en interne comme en externe, coordonner l'équipe et adapter le message selon les publics.</p>
+              <ul>
+                <li><strong>Communication interne</strong> : réunions, consignes, suivi des tâches</li>
+                <li><strong>Communication externe</strong> : affiches, digital, salons, supports print</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="jpo-box">
+            <div class="jpo-box-header">Identité visuelle</div>
+            <div class="jpo-box-body">
+              <p>Nous avons construit une identité cohérente pour la JPO : réflexion sur le concept, déclinaison sur les supports, création, tests, puis ajustements jusqu'au rendu final.</p>
+              <div class="jpo-media">
+                <img src="assets/JPO%20Visuel.png" alt="Identité visuelle JPO" loading="lazy" />
+                <p class="jpo-caption">Charte et visuels principaux</p>
+              </div>
+              <div class="jpo-media-grid">
+                <div>
+                  <img src="assets/JPO%20goodies%20.png" alt="JPO goodies" loading="lazy" />
+                  <p class="jpo-caption">Goodies</p>
+                </div>
+                <div>
+                  <img src="assets/JPO%20bonbon.png" alt="Bonbons JPO" loading="lazy" />
+                  <p class="jpo-caption">Dépliants informatifs</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="jpo-box">
+            <div class="jpo-box-header">Outils utilisés</div>
+            <div class="jpo-box-body">
+              <ul>
+                <li><strong>Suite Adobe</strong> : création des visuels, affiches et supports graphiques</li>
+                <li><strong>Google Drive</strong> : partage de documents, fichiers et planning</li>
+                <li><strong>WhatsApp</strong> : coordination rapide de l'équipe</li>
+                <li><strong>Rétroplanning</strong> : organisation des étapes et respect des délais</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="jpo-box">
+            <div class="jpo-box-header">Gestion de projet &amp; budget</div>
+            <div class="jpo-box-body">
+              <p>En tant que <strong>trésorier</strong>, j'ai assuré le suivi du budget : devis, dépenses, achats (goodies, matériel) et équilibre des comptes sur la durée du projet.</p>
+              <p>Ce rôle m'a permis de lier création, logistique et contraintes financières pour tenir un projet global cohérent.</p>
+            </div>
+          </div>
+
+          <div class="jpo-box">
+            <div class="jpo-box-header">Le jour J</div>
+            <div class="jpo-box-body">
+              <p>Le jour de la JPO, les salles thématiques ont permis aux visiteurs de découvrir concrètement la formation, ses outils et les réalisations des étudiants.</p>
+              <div class="jpo-media-grid">
+                <div>
+                  <img src="assets/JPO%20jour%20J.png" alt="Jour J JPO" loading="lazy" />
+                  <p class="jpo-caption">Notre équipe le Jour J</p>
+                </div>
+                <div>
+                  <img src="assets/JPO%20salle%20cre%CC%81a.png" alt="Salle créa" loading="lazy" />
+                  <p class="jpo-caption">La salle créa durant la JPO</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <aside class="jpo-sidebar">
+          <h2 class="jpo-sidebar-title">Chiffres clés</h2>
+          <div class="jpo-side-stat">
+            <strong>220</strong>
+            visiteurs accueillis
+          </div>
+          <div class="jpo-side-stat">
+            <strong>8</strong>
+            étudiants organisateurs
+          </div>
+          <div class="jpo-box">
+            <div class="jpo-box-header">Mon rôle</div>
+            <div class="jpo-box-body" style="font-size:11px;">
+              <p><strong>Trésorier</strong> de l'équipe JPO : gestion du budget, suivi des achats et participation à l'organisation générale.</p>
+            </div>
+          </div>
+          <a class="jpo-cta" href="#" data-open="contact">Me contacter</a>
+        </aside>
+      </div>
+    </div>
+    <div class="statusbar"><span>Blog JPO</span><span>Lubin DAUL</span></div>
+  </div>
+
+  <!-- Blog E.Leclerc - Stage Community Manager -->
+  <div id="win-leclercblog" class="xp-window" data-id="leclercblog" style="left: 80px; top: 32px; width: 820px; height: 560px;">
+    <div class="titlebar">
+      <img class="titlebar-icon" src="assets/logo%20leclerc.png" alt="" loading="lazy" />
+      <span class="titlebar-text">E.Leclerc Marmoutier - Stage - Internet Explorer</span>
+      <div class="titlebar-buttons">
+        <button type="button" class="btn-min" title="Réduire">_</button>
+        <button type="button" class="btn-max" title="Agrandir">□</button>
+        <button type="button" class="btn-close" title="Fermer">×</button>
+      </div>
+    </div>
+    <div class="menubar"><span>Fichier</span><span>Édition</span><span>Affichage</span></div>
+    <div class="leclerc-blog">
+      <header class="leclerc-blog-hero">
+        <img class="leclerc-logo-main" src="assets/logo%20leclerc.png" alt="E.Leclerc" loading="lazy" />
+        <div>
+          <h1>Stage E.Leclerc - Marmoutier</h1>
+          <p style="color:#555;margin:0;">Communication digitale &amp; création de contenu</p>
+          <span class="leclerc-role-badge">Stagiaire Community Manager</span>
+        </div>
+      </header>
+      <div class="leclerc-blog-layout">
+        <main class="leclerc-main">
+          <div class="leclerc-box">
+            <div class="leclerc-box-header">En bref</div>
+            <div class="leclerc-box-body">
+              <p>Première immersion en <strong>communication digitale</strong> au sein du magasin E.Leclerc de Marmoutier : animation des réseaux sociaux et production de contenus pour valoriser le point de vente.</p>
+              <div class="leclerc-media">
+                <img src="assets/Leclerc%20de%20Marmoutier%20lieu%20de%20stage.png" alt="Magasin E.Leclerc Marmoutier" loading="lazy" />
+                <p class="leclerc-caption">E.Leclerc Marmoutier - lieu de stage</p>
+                <button type="button" class="projet-fs-btn" data-fs-src="assets/Leclerc%20de%20Marmoutier%20lieu%20de%20stage.png" data-fs-type="image">Agrandir</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="leclerc-box">
+            <div class="leclerc-box-header">Réseaux sociaux</div>
+            <div class="leclerc-box-body">
+              <p>Gestion de <strong>Facebook</strong>, <strong>Instagram</strong> et <strong>TikTok</strong> du magasin.</p>
+              <p>Avec la fin progressive des catalogues papier, le digital sert à <strong>informer</strong>, <strong>fidéliser</strong> et mettre en avant les <strong>offres</strong> et <strong>événements</strong> du magasin.</p>
+            </div>
+          </div>
+
+          <div class="leclerc-box leclerc-box--highlight">
+            <div class="leclerc-box-header">TikTok</div>
+            <div class="leclerc-box-body">
+              <p>J'ai proposé et réalisé des <strong>vidéos TikTok</strong> inspirées des tendances du moment : format court, dynamique, adapté au magasin.</p>
+              <p><strong>Plus de 80 000 vues</strong> cumulées sur <strong>8 publications</strong> : un vrai levier de visibilité locale pour le point de vente.</p>
+              <div class="leclerc-tiktok-grid">
+                <div class="leclerc-tiktok-item">
+                  <div class="lazy-video-wrap lazy-video-wrap--tiktok">
+                    <video class="lazy-video" controls preload="none" data-src="assets/Tiktok%20leclerc%201.MP4" title="TikTok Leclerc 1"></video>
+                    <button type="button" class="lazy-video-play" aria-label="Lire TikTok Leclerc 1"><span class="lazy-video-play-icon" aria-hidden="true">▶</span><span class="lazy-video-play-label">Lire</span></button>
+                  </div>
+                  <button type="button" class="projet-fs-btn" data-fs-src="assets/Tiktok%20leclerc%201.MP4" data-fs-type="video">Plein écran</button>
+                  <p class="leclerc-caption">TikTok 1</p>
+                </div>
+                <div class="leclerc-tiktok-item">
+                  <div class="lazy-video-wrap lazy-video-wrap--tiktok">
+                    <video class="lazy-video" controls preload="none" data-src="assets/Tiktok%20leclerc%202.MP4" title="TikTok Leclerc 2"></video>
+                    <button type="button" class="lazy-video-play" aria-label="Lire TikTok Leclerc 2"><span class="lazy-video-play-icon" aria-hidden="true">▶</span><span class="lazy-video-play-label">Lire</span></button>
+                  </div>
+                  <button type="button" class="projet-fs-btn" data-fs-src="assets/Tiktok%20leclerc%202.MP4" data-fs-type="video">Plein écran</button>
+                  <p class="leclerc-caption">TikTok 2</p>
+                </div>
+                <div class="leclerc-tiktok-item">
+                  <div class="lazy-video-wrap lazy-video-wrap--tiktok">
+                    <video class="lazy-video" controls preload="none" data-src="assets/Tiktok%20leclerc%203.MP4" title="TikTok Leclerc 3"></video>
+                    <button type="button" class="lazy-video-play" aria-label="Lire TikTok Leclerc 3"><span class="lazy-video-play-icon" aria-hidden="true">▶</span><span class="lazy-video-play-label">Lire</span></button>
+                  </div>
+                  <button type="button" class="projet-fs-btn" data-fs-src="assets/Tiktok%20leclerc%203.MP4" data-fs-type="video">Plein écran</button>
+                  <p class="leclerc-caption">TikTok 3</p>
+                </div>
+                <div class="leclerc-tiktok-item">
+                  <div class="lazy-video-wrap lazy-video-wrap--tiktok">
+                    <video class="lazy-video" controls preload="none" data-src="assets/Tiktok%20leclerc%204.MP4" title="TikTok Leclerc 4"></video>
+                    <button type="button" class="lazy-video-play" aria-label="Lire TikTok Leclerc 4"><span class="lazy-video-play-icon" aria-hidden="true">▶</span><span class="lazy-video-play-label">Lire</span></button>
+                  </div>
+                  <button type="button" class="projet-fs-btn" data-fs-src="assets/Tiktok%20leclerc%204.MP4" data-fs-type="video">Plein écran</button>
+                  <p class="leclerc-caption">TikTok 4</p>
+                </div>
+                <div class="leclerc-tiktok-item">
+                  <div class="lazy-video-wrap lazy-video-wrap--tiktok">
+                    <video class="lazy-video" controls preload="none" data-src="assets/Tiktok%20leclerc%205.MP4" title="TikTok Leclerc 5"></video>
+                    <button type="button" class="lazy-video-play" aria-label="Lire TikTok Leclerc 5"><span class="lazy-video-play-icon" aria-hidden="true">▶</span><span class="lazy-video-play-label">Lire</span></button>
+                  </div>
+                  <button type="button" class="projet-fs-btn" data-fs-src="assets/Tiktok%20leclerc%205.MP4" data-fs-type="video">Plein écran</button>
+                  <p class="leclerc-caption">TikTok 5</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="leclerc-box">
+            <div class="leclerc-box-header">Création de contenus</div>
+            <div class="leclerc-box-body">
+              <ul>
+                <li>Prises de photos et vidéos en magasin</li>
+                <li>Valorisation des produits, événements et opérations commerciales</li>
+                <li>Adaptation des visuels selon chaque plateforme, dans l'identité du magasin</li>
+              </ul>
+              <div class="leclerc-media-grid">
+                <div class="leclerc-media-item">
+                  <div class="leclerc-media-thumb">
+                    <img src="assets/Leclerc%20post%20facebook%20vente%20chocolat.png" alt="Post Facebook chocolat" loading="lazy" />
+                  </div>
+                  <p class="leclerc-caption">Facebook - opération chocolat</p>
+                  <button type="button" class="projet-fs-btn" data-fs-src="assets/Leclerc%20post%20facebook%20vente%20chocolat.png" data-fs-type="image">Agrandir</button>
+                </div>
+                <div class="leclerc-media-item">
+                  <div class="leclerc-media-thumb">
+                    <img src="assets/Leclerc%20Post%20facebook%20pack%20charcuterie%3Afromage.png" alt="Post Facebook charcuterie fromage" loading="lazy" />
+                  </div>
+                  <p class="leclerc-caption">Facebook - charcuterie &amp; fromage</p>
+                  <button type="button" class="projet-fs-btn" data-fs-src="assets/Leclerc%20Post%20facebook%20pack%20charcuterie%3Afromage.png" data-fs-type="image">Agrandir</button>
+                </div>
+                <div class="leclerc-media-item">
+                  <div class="leclerc-media-thumb">
+                    <img src="assets/Leclerc%20post%20insta%20activite%CC%81%20carnaval.png" alt="Post Instagram carnaval" loading="lazy" />
+                  </div>
+                  <p class="leclerc-caption">Instagram - activité carnaval</p>
+                  <button type="button" class="projet-fs-btn" data-fs-src="assets/Leclerc%20post%20insta%20activite%CC%81%20carnaval.png" data-fs-type="image">Agrandir</button>
+                </div>
+                <div class="leclerc-media-item">
+                  <div class="leclerc-media-thumb">
+                    <img src="assets/Leclerc%20Post%20insta%20arbre%20a%CC%80%20chat%20.png" alt="Post Instagram arbre à chat" loading="lazy" />
+                  </div>
+                  <p class="leclerc-caption">Instagram - arbre à chat</p>
+                  <button type="button" class="projet-fs-btn" data-fs-src="assets/Leclerc%20Post%20insta%20arbre%20a%CC%80%20chat%20.png" data-fs-type="image">Agrandir</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="leclerc-box">
+            <div class="leclerc-box-header">Création graphique</div>
+            <div class="leclerc-box-body">
+              <p>Affiches, promotions, animations en magasin et visuels pour les publications : <strong>création</strong> et <strong>adaptation</strong> au format de chaque support (Facebook, Instagram, affichage magasin).</p>
+            </div>
+          </div>
+
+          <div class="leclerc-box">
+            <div class="leclerc-box-header">Outils utilisés</div>
+            <div class="leclerc-box-body">
+              <div class="leclerc-tools-grid">
+                <span class="leclerc-tool-pill">Meta Business Suite</span>
+                <span class="leclerc-tool-pill">CapCut</span>
+                <span class="leclerc-tool-pill">Canva</span>
+                <span class="leclerc-tool-pill">CorelDRAW</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="leclerc-box">
+            <div class="leclerc-box-header">Bilan</div>
+            <div class="leclerc-box-body">
+              <p>Ce stage m'a permis de développer des compétences concrètes en <strong>création de contenu</strong>, <strong>réseaux sociaux</strong> et <strong>outils numériques</strong>.</p>
+              <p>Points forts : <strong>vidéos TikTok</strong>, <strong>interaction avec le public</strong>, <strong>projets créatifs</strong> et découverte d'outils graphiques utiles pour la suite de mon parcours.</p>
+            </div>
+          </div>
+        </main>
+
+        <aside class="leclerc-sidebar">
+          <h2 class="leclerc-sidebar-title">Chiffres clés</h2>
+          <div class="leclerc-side-stat">
+            <strong>80 000+</strong>
+            vues TikTok
+          </div>
+          <div class="leclerc-side-stat">
+            <strong>8</strong>
+            publications TikTok
+          </div>
+          <div class="leclerc-side-stat">
+            <strong>3</strong>
+            réseaux animés
+          </div>
+          <div class="leclerc-box">
+            <div class="leclerc-box-header">Mon rôle</div>
+            <div class="leclerc-box-body" style="font-size:11px;">
+              <p><strong>Stagiaire Community Manager</strong> : création de contenus, animation digitale et visuels pour le magasin.</p>
+            </div>
+          </div>
+          <a class="leclerc-cta" href="#" data-open="contact">Me contacter</a>
+        </aside>
+      </div>
+    </div>
+    <div class="statusbar"><span>Blog E.Leclerc</span><span>Lubin DAUL</span></div>
+  </div>
+
+  <!-- YouTube rétro - projets pub -->
+  <div id="win-youtube" class="xp-window" data-id="youtube" style="left: 60px; top: 28px; width: 820px; height: 520px;">
+    <div class="titlebar">
+      <img class="titlebar-icon" src="assets/logo%20youtube.png" alt="" loading="lazy" />
+      <span class="titlebar-text">YouTube - Projets publicité - Internet Explorer</span>
+      <div class="titlebar-buttons">
+        <button type="button" class="btn-min" title="Réduire">_</button>
+        <button type="button" class="btn-max" title="Agrandir">□</button>
+        <button type="button" class="btn-close" title="Fermer">×</button>
+      </div>
+    </div>
+    <div class="yt-retro">
+      <div class="yt-topbar">
+        <div class="yt-logo-block">
+          <img class="yt-logo-img" src="assets/logo%20youtube.png" alt="YouTube" loading="lazy" />
+          <div class="yt-tagline">Broadcast Yourself - Portfolio Lubin DAUL</div>
+        </div>
+        <div class="yt-account-links">
+          <a href="#" data-yt-modal="signup">Sign Up</a> | <a href="#" data-yt-modal="login">Log In</a> | <a href="#" data-yt-modal="help">Help</a>
+        </div>
+      </div>
+      <div class="yt-modal-overlay" id="yt-modal-overlay">
+        <div class="yt-modal" id="yt-modal-signup" hidden>
+          <div class="titlebar">
+            <span class="titlebar-text">Sign Up - YouTube</span>
+            <div class="titlebar-buttons">
+              <button type="button" class="btn-close yt-modal-close" title="Fermer">×</button>
+            </div>
+          </div>
+          <div class="yt-modal-body">
+            <p>Création de compte - coordonnées du portfolio :</p>
+            <label for="yt-su-id">Identifiant</label>
+            <input type="text" id="yt-su-id" value="Lubin DAUL" readonly />
+            <label for="yt-su-prenom">Prénom</label>
+            <input type="text" id="yt-su-prenom" value="Lubin" readonly />
+            <label for="yt-su-nom">Nom</label>
+            <input type="text" id="yt-su-nom" value="DAUL" readonly />
+            <label for="yt-su-mail">E-mail</label>
+            <input type="email" id="yt-su-mail" value="lubin.daul67@gmail.com" readonly />
+            <label for="yt-su-tel">Téléphone</label>
+            <input type="text" id="yt-su-tel" value="06.61.70.82.49" readonly />
+            <label for="yt-su-pass">Mot de passe</label>
+            <input type="text" id="yt-su-pass" value="••••••••" readonly />
+            <div class="yt-modal-actions">
+              <button type="button" class="yt-modal-close">Fermer</button>
+            </div>
+          </div>
+        </div>
+        <div class="yt-modal" id="yt-modal-login" hidden>
+          <div class="titlebar">
+            <span class="titlebar-text">Log In - YouTube</span>
+            <div class="titlebar-buttons">
+              <button type="button" class="btn-close yt-modal-close" title="Fermer">×</button>
+            </div>
+          </div>
+          <div class="yt-modal-body">
+            <label for="yt-li-name">Nom et prénom</label>
+            <input type="text" id="yt-li-name" value="Lubin DAUL" readonly />
+            <label for="yt-li-mail">E-mail</label>
+            <input type="email" id="yt-li-mail" value="lubin.daul67@gmail.com" readonly />
+            <label for="yt-li-pass">Mot de passe</label>
+            <input type="text" id="yt-li-pass" value="••••••••" readonly />
+            <div class="yt-modal-actions">
+              <button type="button" class="yt-modal-close">Connexion (démo)</button>
+              <button type="button" class="yt-modal-close">Fermer</button>
+            </div>
+          </div>
+        </div>
+        <div class="yt-modal" id="yt-modal-help" hidden>
+          <div class="titlebar">
+            <span class="titlebar-text">Help - YouTube</span>
+            <div class="titlebar-buttons">
+              <button type="button" class="btn-close yt-modal-close" title="Fermer">×</button>
+            </div>
+          </div>
+          <div class="yt-modal-body">
+            <p><strong>En cas de besoin, n'hésitez pas à solliciter Daul Lubin.</strong></p>
+            <p style="margin-top:12px;">
+              <strong>E-mail :</strong><br />
+              <a href="mailto:lubin.daul67@gmail.com">lubin.daul67@gmail.com</a>
+            </p>
+            <p style="margin-top:10px;">
+              <strong>Téléphone :</strong><br />
+              <a href="tel:+33661708249">06.61.70.82.49</a>
+            </p>
+            <div class="yt-modal-actions">
+              <button type="button" class="yt-modal-close">Fermer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="yt-search-row">
+        <label for="yt-search">Rechercher :</label>
+        <input type="text" id="yt-search" placeholder="Projets publicité…" />
+        <select aria-label="Type">
+          <option>Videos</option>
+        </select>
+        <button type="button" id="yt-search-btn">Search</button>
+      </div>
+      <div class="yt-tabs">
+        <span class="yt-tab active" data-yt-tab="home" role="button" tabindex="0">Home</span>
+        <span class="yt-tab" data-yt-tab="videos" role="button" tabindex="0">Videos</span>
+        <span class="yt-tab disabled" data-yt-tab="channels" title="Bientôt disponible">Channels</span>
+      </div>
+      <div class="yt-subnav">
+        <a href="#" data-prevent>Mes vidéos pub</a> | <a href="#" data-prevent>Favoris</a> | <a href="#" data-open="mesprojets">Mes projets (dossier)</a>
+      </div>
+      <div class="yt-watch" id="yt-watch">
+        <div class="yt-watch-bar">
+          <button type="button" id="yt-back-home">« Retour à l'accueil YouTube</button>
+          <span id="yt-watch-label">Lecture</span>
+        </div>
+        <div class="yt-player-wrap">
+          <h2 id="yt-watch-title"></h2>
+          <div class="yt-watch-actions">
+            <a id="yt-watch-open" class="yt-open-youtube-btn" href="#" target="_blank" rel="noopener noreferrer">▶ Regarder sur YouTube.com</a>
+          </div>
+          <img id="yt-watch-thumb" class="yt-watch-thumb" src="" alt="" loading="lazy" />
+          <p id="yt-watch-desc" style="margin-top:12px;font-size:12px;color:#333;"></p>
+          <div id="yt-coulisses" class="yt-coulisses" hidden>
+            <p id="yt-coulisses-text" class="yt-coulisses-text"></p>
+            <div id="yt-coulisses-photos" class="yt-coulisses-photos"></div>
+          </div>
+          <p class="yt-watch-note">La lecture s’ouvre sur le site YouTube (évite les erreurs d’intégration).</p>
+        </div>
+      </div>
+      <div class="yt-body yt-home" id="yt-home">
+        <div class="yt-main">
+          <div class="yt-panel" id="yt-panel-home">
+            <div class="yt-section-title" id="yt-section-title">Featured Videos - Projets publicité (BUT Info-Com)</div>
+            <div id="yt-video-list"></div>
+            <p style="margin-top:14px;font-size:11px;color:#666;">
+              Double-cliquez une vidéo pour l’ouvrir sur <strong>YouTube.com</strong>.
+            </p>
+          </div>
+          <div class="yt-panel hidden" id="yt-panel-videos">
+            <div class="yt-section-title">Videos - Mes projets publicité</div>
+            <div id="yt-video-list-videos"></div>
+            <p style="margin-top:14px;font-size:11px;color:#666;">
+              Toutes les vidéos pub - double-clic pour lancer sur YouTube.
+            </p>
+          </div>
+        </div>
+        <div class="yt-sidebar">
+          <div class="yt-sidebar-box">
+            <h4>Broadcast Yourself</h4>
+            <p><strong>Watch.</strong> Double-cliquez une vidéo : ouverture sur YouTube.com.</p>
+            <p style="margin-top:6px;"><strong>Share.</strong> Projets de communication et publicité.</p>
+          </div>
+          <div class="yt-sidebar-box">
+            <h4>Member Login</h4>
+            <p style="color:#666;">Visiteur : Lubin DAUL</p>
+            <p style="margin-top:8px;"><a href="#" data-open="contact">Contact</a></p>
+          </div>
+          <div class="yt-sidebar-box">
+            <h4>What's New</h4>
+            <p>Portfolio Windows XP - alternance communication.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="statusbar"><span id="yt-status">Prêt</span><span>Projets pub - YouTube</span></div>
+  </div>
+
+  <!-- Ma Formation -->
+  <div id="win-formation" class="xp-window" data-id="formation" style="left: 110px; top: 56px; width: 560px; height: 420px;">
+    <div class="titlebar">
+      <img class="titlebar-icon" src="assets/logo%20info%20com%20.png" alt="" loading="lazy" />
+      <span class="titlebar-text">Ma Formation</span>
+      <div class="titlebar-buttons">
+        <button type="button" class="btn-min">_</button>
+        <button type="button" class="btn-max">□</button>
+        <button type="button" class="btn-close">×</button>
+      </div>
+    </div>
+    <div class="menubar"><span>Fichier</span><span>Édition</span><span>Affichage</span></div>
+    <div class="explorer-body">
+      <div class="sidebar">
+        <div class="task-panel">
+          <h3>Parcours</h3>
+          <ul>
+            <li>BUT Info-Com</li>
+            <li>Publicité</li>
+            <li>2024 - 2027</li>
+            <li>IUT Besançon-Vesoul</li>
+          </ul>
+        </div>
+      </div>
+      <div class="content-pane">
+        <h2>Formation actuelle</h2>
+        <ul>
+          <li><strong>BUT Information-Communication</strong> - parcours publicité (2024-2027)<br />IUT Besançon-Vesoul</li>
+        </ul>
+        <p style="margin-top:10px;line-height:1.55;">Le BUT Information-Communication (parcours Publicité) de l'IUT Besançon-Vesoul forme aux métiers de la <strong>communication</strong>, de la <strong>création</strong> et de la <strong>stratégie publicitaire</strong> à travers des projets concrets et professionnalisants.</p>
+        <p style="margin-top:8px;line-height:1.55;">La formation mêle cours créatifs, travail en équipe et interventions de professionnels. Les étudiants participent à des <strong>challenges</strong>, <strong>campagnes</strong> et <strong>projets associatifs ou événementiels</strong>, proches du terrain.</p>
+        <h2>Diplômes</h2>
+        <ul>
+          <li><strong>Baccalauréat général</strong> avec mention (2021-2024)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="statusbar"><span>Prêt</span></div>
+  </div>
+
+  <!-- Compétences -->
+  <div id="win-competences" class="xp-window" data-id="competences" style="left: 150px; top: 76px; width: 580px; height: 390px;">
+    <div class="titlebar">
+      <img class="titlebar-icon" src="assets/ico%CC%82ne%20comp%C3%A9tence.png" alt="" loading="lazy" />
+      <span class="titlebar-text">Compétences</span>
+      <div class="titlebar-buttons">
+        <button type="button" class="btn-min">_</button>
+        <button type="button" class="btn-max">□</button>
+        <button type="button" class="btn-close">×</button>
+      </div>
+    </div>
+    <div class="explorer-body">
+      <div class="sidebar">
+        <div class="task-panel">
+          <h3>Catégories</h3>
+          <ul>
+            <li>Humaines</li>
+            <li>Logicielles</li>
+            <li>Langues</li>
+          </ul>
+        </div>
+      </div>
+      <div class="content-pane">
+        <h2>Compétences humaines</h2>
+        <ul>
+          <li>Travail en équipe</li>
+          <li>Relationnel</li>
+          <li>Autonomie</li>
+          <li>Esprit pratique</li>
+          <li>Anglais - niveau B2 / C1</li>
+        </ul>
+        <h2>Compétences logicielles</h2>
+        <ul>
+          <li>Adobe Photoshop</li>
+          <li>Adobe Illustrator</li>
+          <li>Adobe InDesign</li>
+          <li>Adobe Premiere Pro</li>
+          <li>Canva</li>
+        </ul>
+      </div>
+    </div>
+    <div class="statusbar"><span>10 compétences listées</span></div>
+  </div>
+
+  <!-- Contact -->
+  <div id="win-contact" class="xp-window" data-id="contact" style="left: 190px; top: 46px; width: 460px; height: 300px;">
+    <div class="titlebar">
+      <img class="titlebar-icon" src="assets/Icone%20contact.png" alt="" loading="lazy" />
+      <span class="titlebar-text">Contact - Messagerie</span>
+      <div class="titlebar-buttons">
+        <button type="button" class="btn-min">_</button>
+        <button type="button" class="btn-max">□</button>
+        <button type="button" class="btn-close">×</button>
+      </div>
+    </div>
+    <div class="content-pane">
+      <h2>Coordonnées</h2>
+      <ul>
+        <li><strong>E-mail :</strong> <a href="mailto:lubin.daul67@gmail.com">lubin.daul67@gmail.com</a></li>
+        <li><strong>Téléphone :</strong> <a href="tel:+33661708249">06.61.70.82.49</a></li>
+        <li><strong>LinkedIn :</strong> <a href="https://www.linkedin.com/in/lubin-daul" target="_blank" rel="noopener noreferrer">Lubin Daul</a></li>
+      </ul>
+      <p style="margin-top: 14px; color: #444;">Disponible pour un échange autour d'une alternance en communication.</p>
+    </div>
+    <div class="statusbar"><span>En ligne</span></div>
+  </div>
+
+  <!-- Blog À propos - Lubin DAUL -->
+  <div id="win-apropos" class="xp-window" data-id="apropos" style="left: 70px; top: 36px; width: 820px; height: 560px;">
+    <div class="titlebar">
+      <img class="titlebar-icon" src="assets/logo%20noir%20ld.png" alt="" loading="lazy" />
+      <span class="titlebar-text">À propos de moi - Blog - Internet Explorer</span>
+      <div class="titlebar-buttons">
+        <button type="button" class="btn-min" title="Réduire">_</button>
+        <button type="button" class="btn-max" title="Agrandir">□</button>
+        <button type="button" class="btn-close" title="Fermer">×</button>
+      </div>
+    </div>
+    <div class="menubar"><span>Fichier</span><span>Édition</span><span>Affichage</span><span>Favoris</span></div>
+    <div class="apropos-blog">
+      <header class="apropos-blog-hero">
+        <img src="assets/logo%20noir%20ld.png" alt="Lubin" style="height:48px;width:auto;" loading="lazy" />
+        <div>
+          <h1>À propos de moi</h1>
+          <p class="apropos-blog-tagline">BUT Info-Com · Publicité · IUT Besançon-Vesoul</p>
+          <span class="apropos-badge">Blog perso</span>
+        </div>
+      </header>
+      <div class="apropos-blog-layout">
+        <main class="apropos-main">
+          <div class="apropos-box apropos-box--intro">
+            <div class="apropos-box-header">À la première personne</div>
+            <div class="apropos-box-body">
+              <p>Je m'appelle <strong>Lubin</strong> et je suis actuellement étudiant en deuxième année de <strong>BUT Information-Communication</strong>, parcours <strong>Publicité</strong> à l'IUT de Besançon-Vesoul.</p>
+              <p>J'aime le <strong>sport en général</strong>, et surtout le <strong>football</strong> : je pratique le foot avec le <strong>club de l'IUT</strong> et la <strong>musculation</strong> en salle.</p>
+              <p>Je me passionne particulièrement pour la <strong>création</strong>, avec un attrait marqué pour la <strong>conception-rédaction</strong>, qui me permet de jouer avec les mots et les idées pour donner vie aux messages.</p>
+              <p>Originaire d'<strong>Alsace</strong>, j'emporte avec moi ce qui caractérise bien ma région : la chaleur, la convivialité et l'accueil. En dehors de mes études, je nourris mes inspirations et ma curiosité à travers la <strong>musique</strong>, le <strong>cinéma</strong> et l'<strong>histoire</strong>.</p>
+              <p><strong>Curieux de nature</strong>, j'aime apprendre, découvrir et m'ouvrir à de nouveaux horizons.</p>
+              <div class="apropos-photo-trio">
+                <figure class="apropos-photo-card apropos-photo-card--left">
+                  <img src="assets/Oscar.JPG" alt="Lubin - Oscar" loading="lazy" />
+                </figure>
+                <figure class="apropos-photo-card apropos-photo-card--center">
+                  <img src="assets/Me%CC%81daille.JPG" alt="Lubin - médaille" loading="lazy" />
+                </figure>
+                <figure class="apropos-photo-card apropos-photo-card--right">
+                  <img src="assets/Football.jpg" alt="Lubin - football" loading="lazy" />
+                </figure>
+              </div>
+            </div>
+          </div>
+
+          <div class="apropos-box apropos-box--culture">
+            <div class="apropos-box-header">Ce qui me définit</div>
+            <div class="apropos-box-body">
+              <div class="apropos-define-row">
+                <div class="apropos-define-text">
+                  <p>J'adore la <strong>musique</strong> : je travaille avec, je me douche avec, je roule avec. Pour moi, elle donne vie à ma <strong>créativité</strong>. La <strong>scénographie des concerts</strong> m'inspire particulièrement.</p>
+                  <p>Le <strong>cinéma</strong> est une vraie source d'inspiration et de réflexion pour moi, que ce soit à travers les <strong>séries</strong>, les <strong>films</strong> ou les <strong>anime</strong>. J'y retrouve des personnages, des récits et des univers qui nourrissent ma sensibilité et ma manière de raconter.</p>
+                  <p>Ces univers partagent des <strong>valeurs</strong> qui m'enrichissent bien au-delà du simple divertissement : émotion, transmission, identité, engagement. Des repères que j'essaie aussi de faire vivre dans mes projets de communication.</p>
+                </div>
+                <div class="apropos-define-visual">
+                  <div class="apropos-define-pile">
+                    <figure class="apropos-pile-card apropos-pile-card--tiakola">
+                      <img src="assets/Tiakola%20concert.jpg" alt="Concert Tiakola" loading="lazy" />
+                    </figure>
+                    <figure class="apropos-pile-card apropos-pile-card--office">
+                      <img src="assets/the%20office.avif" alt="The Office" loading="lazy" />
+                    </figure>
+                    <figure class="apropos-pile-card apropos-pile-card--onepiece">
+                      <img src="assets/one%20piece.webp" alt="One Piece" loading="lazy" />
+                    </figure>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <aside class="apropos-sidebar">
+          <h2 class="apropos-sidebar-title">Mon profil</h2>
+          <div class="apropos-side-stat">
+            <strong>20 ans</strong>
+            étudiant motivé
+          </div>
+          <div class="apropos-side-stat">
+            <strong>2ᵉ année</strong>
+            BUT Info-Com · Pub
+          </div>
+          <div class="apropos-side-stat">
+            <strong>Objectif</strong>
+            alternance en communication
+          </div>
+          <div class="apropos-box">
+            <div class="apropos-box-header">En résumé</div>
+            <div class="apropos-box-body" style="font-size:11px;">
+              <p>Profil <strong>dynamique</strong>, avec une expérience en <strong>communication digitale</strong> et <strong>événementielle</strong>.</p>
+              <p>À la recherche d'une alternance pour continuer à progresser sur des projets concrets.</p>
+            </div>
+          </div>
+          <a class="apropos-cta" href="#" data-open="contact">Me contacter</a>
+        </aside>
+      </div>
+    </div>
+    <div class="statusbar"><span>Blog perso</span><span>Lubin DAUL</span></div>
+  </div>
+
+  <!-- Popup détail projet -->
+  <div id="detail-popup" class="detail-popup" style="left: 280px; top: 120px;">
+    <div class="titlebar">
+      <img class="titlebar-icon" src="assets/xp-icons/chm-0.png" alt="" loading="lazy" />
+      <span class="titlebar-text" id="detail-title">Détail du projet</span>
+      <div class="titlebar-buttons">
+        <button type="button" class="btn-close" id="detail-close" title="Fermer">×</button>
+      </div>
+    </div>
+    <div class="content-pane" id="detail-body"></div>
+  </div>
+
+  <div id="start-menu">
+    <div class="start-header">Lubin DAUL</div>
+    <div class="start-item" data-open="experience">💼 Mon expérience</div>
+    <div class="start-item" data-open="mesprojets">📁 Mes projets</div>
+    <div class="start-item" data-open="youtube">▶ YouTube - Projets pub</div>
+    <div class="start-item" data-open="formation">🎓 Ma Formation</div>
+    <div class="start-item" data-open="competences">📊 Compétences</div>
+    <div class="start-item" data-open="contact">✉️ Contact</div>
+    <div class="start-item" data-open="apropos">👤 À propos de moi</div>
+    <div class="start-footer">
+      <button type="button" id="start-menu-close">Arrêter</button>
+    </div>
+  </div>
+
+  <div id="taskbar">
+    <button type="button" id="start-btn" aria-label="Menu Démarrer">
+      <img class="start-lubin-logo" src="assets/logo%20noir%20ld.png" alt="Lubin DAUL" width="56" height="56" loading="lazy" />
+      <span>Démarrer</span>
+    </button>
+    <div id="taskbar-windows"></div>
+    <div id="tray">
+      <button
+        type="button"
+        id="tray-audio-toggle"
+        class="tray-audio-btn"
+        title="Couper les sons d'interface (clics fenêtres)"
+        aria-label="Sons d'interface activés"
+        aria-pressed="false"
+      >
+        <span class="tray-audio-icon" aria-hidden="true">🔊</span>
+      </button>
+      <span id="clock">--:--</span>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const TITLES = {
+        experience: "Mon expérience",
+        mesprojets: "Mes projets",
+        corbeau: "Le Corbeau",
+        tintin: "Affiche Tintin",
+        peurtemps: "La peur du temps",
+        maxence: "Affiche Maxence",
+        matrixldc: "Affiche Matrix LDC",
+        olise: "Affiche Olise",
+        jpoblog: "JPO - Blog",
+        leclercblog: "E.Leclerc - Stage",
+        youtube: "YouTube",
+        formation: "Ma Formation",
+        competences: "Compétences",
+        contact: "Contact",
+        apropos: "À propos de moi",
+        cv: "CV"
+      };
+
+      /* Ajoutez vos vidéos : videoId = l’identifiant après v= dans l’URL YouTube */
+      const YOUTUBE_VIDEOS = [
+        {
+          videoId: "4Uq7LFsmdx4",
+          title: "Pub décathlon Gant MMA",
+          duration: "-",
+          user: "LubinDAUL",
+          views: "-",
+          description:
+            "Nous avons réalisé une publicité Decathlon pour des gants MMA, pensée pour les formats Reels, TikTok et Shorts, en accord avec la cible et le contenu.",
+          listNote: "Montage vidéo BUT Info-Com.",
+          tags: ["publicité", "Decathlon", "MMA", "sport"],
+          category: "Sports",
+          date: "2025"
+        },
+        {
+          videoId: "2sQ3A2V1KPw",
+          title: "Pub Yamaha YZ125",
+          duration: "-",
+          user: "LubinDAUL",
+          views: "-",
+          description:
+            "Projet publicité — spot Yamaha YZ125, tournage à quatre puis montage personnel mêlant référence culturelle et sport mécanique.",
+          listNote: "Montage réalisé sur Adobe Premiere Pro.",
+          coulisses: true,
+          coulissesText: "À quatre, nous avons tourné des plans pour la publicité. Chacun a ensuite réalisé sa propre version à partir de ces images. Voici la mienne, mêlant référence culturelle et sport mécanique.",
+          coulissesPhotos: [
+            { src: "assets/Moto%20photo.jpg", alt: "Photo tournage moto 1" },
+            { src: "assets/photo%20moto%202.jpg", alt: "Photo tournage moto 2" }
+          ],
+          tags: ["publicité", "Yamaha", "moto", "YZ125"],
+          category: "Autos & Vehicles",
+          date: "2025"
+        }
+      ];
+
+      let ytCurrentWatchIndex = -1;
+
+      const EXPERIENCE_DETAILS = {
+        leclerc: {
+          title: "Stage communication - E.Leclerc Marmoutier",
+          logo: "assets/logo%20leclerc.png",
+          body: "<h2>Stage communication E.Leclerc</h2><ul><li>Gestion des réseaux sociaux (TikTok, Instagram, Facebook)</li><li>Création de posts</li><li>Création d'affiches</li></ul>"
+        },
+        jpo: {
+          title: "Journée Portes Ouvertes - IUT",
+          logo: "assets/JPO.png",
+          body: "<h2>Journée Portes Ouvertes IUT</h2><p>Participation à l'organisation et à la communication de l'événement à l'IUT Besançon-Vesoul.</p>"
+        },
+        ferco: {
+          title: "Stage à Ferco SAS",
+          logo: "assets/logo%20ferco.png",
+          logoWide: true,
+          body: "<h2>Stage à Ferco SAS</h2><p>Je suis actuellement en <strong>stage de 2 mois</strong> chez <strong>Ferco SAS</strong>, filiale française du <strong>groupe Gretsch-Unitas (Groupe GU)</strong>.</p><p>Ferco (FERrures et COnsoles) est spécialisée dans la <strong>fabrication de ferrures et de serrures</strong> pour fenêtres, portes et coulissants (bois, PVC, aluminium), ainsi que dans les équipements pour le bâtiment. Le site de production est implanté à <strong>Réding (Moselle)</strong>.</p><p>Le Groupe GU est un acteur international de la <strong>technique des fenêtres, des portes et du bâtiment</strong> (ferrures, systèmes d'entrées automatiques, gestion technique du bâtiment), présent dans plus de 35 pays.</p>"
+        },
+        conseil: {
+          title: "Conseil d'Institut",
+          logo: "assets/iut%20conseil.png",
+          body: "<h2>Conseil d'Institut</h2><p>Je suis <strong>représentant étudiant</strong> au conseil d'Institut de l'IUT Besançon-Vesoul.</p><p>Je participe à la vie de l'IUT à travers les <strong>projets</strong> et les <strong>améliorations du campus</strong>. Je fais remonter les avis et besoins des étudiants auprès de la <strong>direction</strong> et des <strong>enseignants</strong>.</p>"
+        }
+      };
+
+      const PROJET_DETAILS = {
+        doc1: {
+          title: "Affiche E.Leclerc",
+          logo: null,
+          body: "<p>Création d'affiches pour le magasin E.Leclerc Marmoutier - document à ajouter dans ce dossier.</p>"
+        },
+        doc2: {
+          title: "Posts réseaux sociaux",
+          logo: null,
+          body: "<p>Créations de posts pour TikTok, Instagram et Facebook - visuels à ajouter prochainement.</p>"
+        },
+        doc3: {
+          title: "Campagne publicité",
+          logo: null,
+          body: "<p>Projet de campagne publicitaire (BUT Info-Com) - document à venir.</p>"
+        },
+        doc4: {
+          title: "Support JPO",
+          logo: null,
+          body: "<p>Supports de communication pour la Journée Portes Ouvertes de l'IUT - à compléter.</p>"
+        }
+      };
+
+      let zTop = 100;
+      const state = {};
+      const taskbarHost = document.getElementById("taskbar-windows");
+      const startMenu = document.getElementById("start-menu");
+      let audioUnlocked = false;
+      let uiSoundsMuted = false;
+
+      function unlockAudio() {
+        audioUnlocked = true;
+      }
+
+      function updateTrayAudioButton() {
+        const btn = document.getElementById("tray-audio-toggle");
+        if (!btn) return;
+        btn.classList.toggle("is-muted", uiSoundsMuted);
+        btn.setAttribute("aria-pressed", uiSoundsMuted ? "true" : "false");
+        btn.title = uiSoundsMuted
+          ? "Réactiver les sons d'interface (clics fenêtres)"
+          : "Couper les sons d'interface (clics fenêtres)";
+        btn.setAttribute(
+          "aria-label",
+          uiSoundsMuted ? "Sons d'interface coupés" : "Sons d'interface activés"
+        );
+      }
+
+      function playSound(kind) {
+        if (!audioUnlocked || uiSoundsMuted) return;
+        const urls = {
+          open: "assets/sounds/bell-open.wav",
+          close: "assets/sounds/bell-close.wav"
+        };
+        try {
+          const a = new Audio(urls[kind]);
+          a.volume = 0.2;
+          a.play().catch(function () {});
+        } catch (e) {}
+      }
+
+      function ensureLazyVideoLoaded(video) {
+        if (!video || video.dataset.loaded === "true") return;
+        var src = video.dataset.src;
+        if (!src) return;
+        video.src = src;
+        video.dataset.loaded = "true";
+        var wrap = video.closest(".lazy-video-wrap");
+        if (wrap) wrap.classList.add("is-loaded");
+      }
+
+      function initLazyVideos() {
+        document.querySelectorAll(".lazy-video").forEach(function (video) {
+          var wrap = video.closest(".lazy-video-wrap");
+          var playBtn = wrap && wrap.querySelector(".lazy-video-play");
+          function loadAndPlay() {
+            ensureLazyVideoLoaded(video);
+            video.play().catch(function () {});
+          }
+          if (playBtn) {
+            playBtn.addEventListener("click", function (e) {
+              e.preventDefault();
+              e.stopPropagation();
+              loadAndPlay();
+            });
+          }
+          video.addEventListener("play", function () {
+            ensureLazyVideoLoaded(video);
+          });
+        });
+      }
+
+      function updateClock() {
+        document.getElementById("clock").textContent = new Date().toLocaleTimeString("fr-FR", {
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+      }
+
+      function getTaskBtn(id) {
+        let btn = document.querySelector('.taskbar-btn[data-id="' + id + '"]');
+        if (!btn) {
+          btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "taskbar-btn";
+          btn.dataset.id = id;
+          btn.textContent = TITLES[id];
+          btn.addEventListener("click", function () {
+            const s = state[id];
+            if (s.visible && !s.minimized) {
+              minimize(id);
+            } else {
+              show(id);
+              focus(id);
+            }
+          });
+          taskbarHost.appendChild(btn);
+        }
+        return btn;
+      }
+
+      function focus(id) {
+        Object.keys(state).forEach(function (key) {
+          const s = state[key];
+          const active = key === id;
+          s.el.style.zIndex = active ? String(++zTop) : String(zTop - 1);
+          s.titlebar.classList.toggle("inactive", !active);
+          getTaskBtn(key).classList.toggle("focused", active && s.visible && !s.minimized);
+        });
+        const popup = document.getElementById("detail-popup");
+        if (popup.classList.contains("open")) {
+          popup.style.zIndex = String(++zTop);
+        }
+      }
+
+      let youtubeListReady = false;
+
+      function ensureYouTubeList() {
+        if (youtubeListReady) return;
+        renderYouTubeList();
+        setYouTubeTab("home");
+        youtubeListReady = true;
+      }
+
+      function show(id) {
+        const s = state[id];
+        s.visible = true;
+        s.minimized = false;
+        s.el.classList.add("visible");
+        getTaskBtn(id).classList.add("on-taskbar");
+        focus(id);
+        playSound("open");
+        if (id === "youtube") ensureYouTubeList();
+      }
+
+      function minimize(id) {
+        const s = state[id];
+        s.minimized = true;
+        s.el.classList.remove("visible");
+        getTaskBtn(id).classList.remove("focused");
+      }
+
+      function close(id) {
+        const s = state[id];
+        s.visible = false;
+        s.minimized = false;
+        s.el.classList.remove("visible", "maximized");
+        const btn = getTaskBtn(id);
+        btn.classList.remove("on-taskbar", "focused");
+        playSound("close");
+      }
+
+      function toggleMax(id) {
+        state[id].el.classList.toggle("maximized");
+      }
+
+      document.querySelectorAll(".xp-window").forEach(function (el) {
+        const id = el.dataset.id;
+        const titlebar = el.querySelector(".titlebar");
+
+        state[id] = {
+          el: el,
+          titlebar: titlebar,
+          visible: false,
+          minimized: false,
+          drag: false
+        };
+
+        el.querySelector(".btn-close").addEventListener("click", function (e) {
+          e.stopPropagation();
+          close(id);
+        });
+        el.querySelector(".btn-min").addEventListener("click", function (e) {
+          e.stopPropagation();
+          minimize(id);
+        });
+        el.querySelector(".btn-max").addEventListener("click", function (e) {
+          e.stopPropagation();
+          toggleMax(id);
+        });
+
+        el.addEventListener("mousedown", function () {
+          if (state[id].visible) focus(id);
+        });
+
+        var offsetX = 0;
+        var offsetY = 0;
+
+        titlebar.addEventListener("mousedown", function (e) {
+          if (e.target.closest("button")) return;
+          if (el.classList.contains("maximized")) return;
+          unlockAudio();
+          const s = state[id];
+          s.drag = true;
+          offsetX = e.clientX - el.offsetLeft;
+          offsetY = e.clientY - el.offsetTop;
+          focus(id);
+        });
+
+        document.addEventListener("mousemove", function (e) {
+          const s = state[id];
+          if (!s.drag) return;
+          el.style.left = Math.max(0, e.clientX - offsetX) + "px";
+          el.style.top = Math.max(0, e.clientY - offsetY) + "px";
+        });
+
+        document.addEventListener("mouseup", function () {
+          state[id].drag = false;
+        });
+      });
+
+      document.querySelectorAll(".desktop-icon").forEach(function (icon) {
+        icon.addEventListener("click", function (e) {
+          e.stopPropagation();
+          unlockAudio();
+          document.querySelectorAll(".desktop-icon").forEach(function (i) {
+            i.classList.remove("selected");
+          });
+          icon.classList.add("selected");
+        });
+        icon.addEventListener("dblclick", function () {
+          show(icon.dataset.win);
+        });
+      });
+
+      document.getElementById("desktop").addEventListener("click", function () {
+        document.querySelectorAll(".desktop-icon").forEach(function (i) {
+          i.classList.remove("selected");
+        });
+      });
+
+      document.getElementById("start-btn").addEventListener("click", function (e) {
+        e.stopPropagation();
+        unlockAudio();
+        startMenu.classList.toggle("open");
+      });
+
+      document.getElementById("start-menu-close").addEventListener("click", function () {
+        startMenu.classList.remove("open");
+      });
+
+      document.addEventListener("click", function () {
+        startMenu.classList.remove("open");
+      });
+
+      startMenu.addEventListener("click", function (e) {
+        e.stopPropagation();
+      });
+
+      document.querySelectorAll("[data-open]").forEach(function (link) {
+        link.addEventListener("click", function (e) {
+          e.preventDefault();
+          show(link.dataset.open);
+          startMenu.classList.remove("open");
+        });
+      });
+
+      document.querySelectorAll(".start-item").forEach(function (item) {
+        item.addEventListener("click", function () {
+          show(item.dataset.open);
+          startMenu.classList.remove("open");
+        });
+      });
+
+      function openDetail(info) {
+        if (!info) return;
+        const popup = document.getElementById("detail-popup");
+        const titlebarIcon = popup.querySelector(".titlebar-icon");
+        document.getElementById("detail-title").textContent = info.title;
+        var html = "";
+        if (info.logo) {
+          var logoClass = "detail-logo" + (info.logoWide ? " detail-logo--wide" : "");
+          html += '<img class="' + logoClass + '" src="' + info.logo + '" alt="" loading="lazy" />';
+          titlebarIcon.src = info.logo;
+        } else {
+          titlebarIcon.src = "assets/xp-icons/document-0.png";
+        }
+        html += info.body;
+        document.getElementById("detail-body").innerHTML = html;
+        popup.classList.add("open");
+        popup.style.zIndex = String(++zTop);
+        unlockAudio();
+      }
+
+      function youtubeWatchUrl(videoId) {
+        return "https://www.youtube.com/watch?v=" + videoId;
+      }
+
+      function buildYouTubeRow(v, index) {
+        const row = document.createElement("div");
+        row.className = "yt-video-row";
+        row.dataset.index = String(index);
+        var thumbHtml;
+        if (v.videoId) {
+          thumbHtml =
+            '<img class="yt-thumb" src="https://img.youtube.com/vi/' +
+            v.videoId +
+            '/hqdefault.jpg" alt="" loading="lazy" onerror="this.src=\'https://img.youtube.com/vi/' +
+            v.videoId +
+            "/mqdefault.jpg'\" />";
+        } else {
+          thumbHtml = '<div class="yt-thumb placeholder">Vidéo<br />à venir</div>';
+        }
+        var tags = (v.tags || []).join(", ");
+        row.innerHTML =
+          thumbHtml +
+          '<div class="yt-video-meta">' +
+          "<h3>" +
+          v.title +
+          "</h3>" +
+          '<div class="yt-meta-line"><strong>' +
+          v.duration +
+          "</strong> | From: <strong>" +
+          v.user +
+          "</strong></div>" +
+          '<div class="yt-meta-line">' +
+          v.description +
+          "</div>" +
+          '<div class="yt-meta-line">Tags: ' +
+          tags +
+          "</div>" +
+          (v.listNote
+            ? '<div class="yt-meta-line yt-meta-note">' + v.listNote + "</div>"
+            : "") +
+          '<div class="yt-meta-line">Added: ' +
+          v.date +
+          " | Category: " +
+          v.category +
+          " | Views: " +
+          v.views +
+          '</div><div class="yt-stars">★★★★★</div></div>' +
+          (v.coulisses
+            ? '<div class="yt-row-coulisses"><button type="button" class="yt-row-coulisses-btn">Coulisses</button></div>'
+            : "");
+
+        var rowCoulissesBtn = row.querySelector(".yt-row-coulisses-btn");
+        if (rowCoulissesBtn) {
+          rowCoulissesBtn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            ensureYouTubeList();
+            show("youtube");
+            openYouTubeWatch(index, true);
+          });
+        }
+
+        function launchOnYouTube() {
+          if (!v.videoId) return;
+          window.open(youtubeWatchUrl(v.videoId), "_blank", "noopener,noreferrer");
+          openYouTubeWatch(index);
+        }
+
+        row.addEventListener("dblclick", launchOnYouTube);
+        row.querySelector(".yt-thumb") &&
+          row.querySelector(".yt-thumb").addEventListener("dblclick", function (e) {
+            e.stopPropagation();
+            launchOnYouTube();
+          });
+        row.querySelector("h3") &&
+          (row.querySelector("h3").style.cursor = "pointer") &&
+          row.querySelector("h3").addEventListener("dblclick", function (e) {
+            e.stopPropagation();
+            launchOnYouTube();
+          });
+        return row;
+      }
+
+      function renderYouTubeList() {
+        const listHome = document.getElementById("yt-video-list");
+        const listVideos = document.getElementById("yt-video-list-videos");
+        if (!listHome) return;
+        listHome.innerHTML = "";
+        if (listVideos) listVideos.innerHTML = "";
+        YOUTUBE_VIDEOS.forEach(function (v, index) {
+          listHome.appendChild(buildYouTubeRow(v, index));
+          if (listVideos) listVideos.appendChild(buildYouTubeRow(v, index));
+        });
+      }
+
+      function setYouTubeTab(tabId) {
+        closeYouTubeWatch();
+        document.querySelectorAll(".yt-tab[data-yt-tab]").forEach(function (tab) {
+          if (tab.classList.contains("disabled")) return;
+          tab.classList.toggle("active", tab.dataset.ytTab === tabId);
+        });
+        const panelHome = document.getElementById("yt-panel-home");
+        const panelVideos = document.getElementById("yt-panel-videos");
+        if (panelHome) panelHome.classList.toggle("hidden", tabId !== "home");
+        if (panelVideos) panelVideos.classList.toggle("hidden", tabId !== "videos");
+        document.getElementById("yt-status").textContent =
+          tabId === "home" ? "Accueil YouTube" : "Liste des vidéos";
+      }
+
+      function renderYtCoulissesPhotos(photos) {
+        const wrap = document.getElementById("yt-coulisses-photos");
+        if (!wrap) return;
+        wrap.innerHTML = "";
+        if (!photos || !photos.length) return;
+        photos.forEach(function (photo) {
+          const img = document.createElement("img");
+          img.src = photo.src;
+          img.alt = photo.alt || "";
+          img.addEventListener("click", function () {
+            openProjetFullscreen(photo.src, "image");
+          });
+          wrap.appendChild(img);
+        });
+      }
+
+      function openYouTubeWatch(index, showCoulisses) {
+        const v = YOUTUBE_VIDEOS[index];
+        if (!v || !v.videoId) return;
+        ytCurrentWatchIndex = index;
+        const url = youtubeWatchUrl(v.videoId);
+        document.getElementById("yt-home").classList.add("hidden");
+        document.getElementById("yt-watch").classList.add("visible");
+        document.getElementById("yt-watch-title").textContent = v.title;
+        document.getElementById("yt-watch-desc").textContent =
+          (v.description || "") + (v.listNote ? "\n\n" + v.listNote : "");
+        document.getElementById("yt-watch-label").textContent = v.user + " - " + v.duration;
+        const openBtn = document.getElementById("yt-watch-open");
+        openBtn.href = url;
+        const thumb = document.getElementById("yt-watch-thumb");
+        thumb.src = "https://img.youtube.com/vi/" + v.videoId + "/hqdefault.jpg";
+        thumb.alt = v.title;
+        thumb.style.cursor = "pointer";
+        thumb.onclick = function () {
+          window.open(url, "_blank", "noopener,noreferrer");
+        };
+        const coulissesBlock = document.getElementById("yt-coulisses");
+        const playerWrap = document.querySelector("#yt-watch .yt-player-wrap");
+        if (v.coulisses) {
+          document.getElementById("yt-coulisses-text").textContent = v.coulissesText || "";
+          renderYtCoulissesPhotos(v.coulissesPhotos);
+          coulissesBlock.hidden = !showCoulisses;
+        } else {
+          coulissesBlock.hidden = true;
+        }
+        if (playerWrap) {
+          playerWrap.classList.toggle("yt-watch-coulisses-mode", !!(showCoulisses && v.coulisses));
+        }
+        document.getElementById("yt-watch-desc").style.display =
+          showCoulisses && v.coulisses ? "none" : "block";
+        document.getElementById("yt-status").textContent =
+          showCoulisses && v.coulisses ? "Coulisses : " + v.title : "Lecture : " + v.title;
+        if (state.youtube && state.youtube.visible) focus("youtube");
+      }
+
+      function closeYouTubeWatch() {
+        ytCurrentWatchIndex = -1;
+        document.getElementById("yt-home").classList.remove("hidden");
+        document.getElementById("yt-watch").classList.remove("visible");
+        const thumb = document.getElementById("yt-watch-thumb");
+        if (thumb) thumb.src = "";
+        const coulissesBlock = document.getElementById("yt-coulisses");
+        if (coulissesBlock) coulissesBlock.hidden = true;
+        const playerWrap = document.querySelector("#yt-watch .yt-player-wrap");
+        if (playerWrap) playerWrap.classList.remove("yt-watch-coulisses-mode");
+        const watchDesc = document.getElementById("yt-watch-desc");
+        if (watchDesc) watchDesc.style.display = "block";
+        document.getElementById("yt-status").textContent = "Prêt";
+      }
+
+      document.getElementById("yt-back-home").addEventListener("click", function () {
+        closeYouTubeWatch();
+        setYouTubeTab("home");
+      });
+
+      document.querySelectorAll(".yt-tab:not(.disabled)").forEach(function (tab) {
+        tab.addEventListener("click", function () {
+          setYouTubeTab(tab.dataset.ytTab);
+        });
+      });
+
+      document.querySelectorAll("[data-prevent]").forEach(function (el) {
+        el.addEventListener("click", function (e) {
+          e.preventDefault();
+        });
+      });
+
+      function openYtModal(type) {
+        const overlay = document.getElementById("yt-modal-overlay");
+        document.querySelectorAll(".yt-modal").forEach(function (m) {
+          m.hidden = true;
+        });
+        const modal = document.getElementById("yt-modal-" + type);
+        if (modal && overlay) {
+          modal.hidden = false;
+          overlay.classList.add("open");
+        }
+      }
+
+      function closeYtModal() {
+        const overlay = document.getElementById("yt-modal-overlay");
+        if (overlay) overlay.classList.remove("open");
+        document.querySelectorAll(".yt-modal").forEach(function (m) {
+          m.hidden = true;
+        });
+      }
+
+      document.querySelectorAll("[data-yt-modal]").forEach(function (link) {
+        link.addEventListener("click", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          openYtModal(link.dataset.ytModal);
+        });
+      });
+
+      document.querySelectorAll(".yt-modal-close").forEach(function (btn) {
+        btn.addEventListener("click", closeYtModal);
+      });
+
+      document.getElementById("yt-modal-overlay").addEventListener("click", function (e) {
+        if (e.target.id === "yt-modal-overlay") closeYtModal();
+      });
+
+      document.getElementById("yt-search-btn").addEventListener("click", function () {
+        const q = document.getElementById("yt-search").value.trim().toLowerCase();
+        document.querySelectorAll("#yt-home .yt-video-row").forEach(function (row) {
+          const text = row.textContent.toLowerCase();
+          row.style.display = !q || text.indexOf(q) >= 0 ? "flex" : "none";
+        });
+      });
+
+      document.querySelectorAll("#win-experience .file-item").forEach(function (item) {
+        item.addEventListener("dblclick", function () {
+          if (item.dataset.detail === "jpo") {
+            show("jpoblog");
+            return;
+          }
+          if (item.dataset.detail === "leclerc") {
+            show("leclercblog");
+            return;
+          }
+          openDetail(EXPERIENCE_DETAILS[item.dataset.detail]);
+        });
+      });
+
+      function openProjetFullscreen(src, type) {
+        const overlay = document.getElementById("projet-fullscreen");
+        const content = document.getElementById("projet-fullscreen-content");
+        if (!overlay || !content) return;
+        content.innerHTML = "";
+        if (type === "image") {
+          const img = document.createElement("img");
+          img.src = src;
+          img.alt = "Plein écran";
+          img.loading = "lazy";
+          content.appendChild(img);
+        } else if (type === "video") {
+          const video = document.createElement("video");
+          video.src = src;
+          video.controls = true;
+          video.autoplay = true;
+          content.appendChild(video);
+        } else if (type === "pdf") {
+          const obj = document.createElement("object");
+          obj.data = src;
+          obj.type = "application/pdf";
+          content.appendChild(obj);
+        }
+        overlay.classList.add("open");
+        overlay.setAttribute("aria-hidden", "false");
+      }
+
+      function closeProjetFullscreen() {
+        const overlay = document.getElementById("projet-fullscreen");
+        const content = document.getElementById("projet-fullscreen-content");
+        if (!overlay) return;
+        overlay.classList.remove("open");
+        overlay.setAttribute("aria-hidden", "true");
+        if (content) {
+          const v = content.querySelector("video");
+          if (v) v.pause();
+          content.innerHTML = "";
+        }
+      }
+
+      document.getElementById("projet-fullscreen-close").addEventListener("click", closeProjetFullscreen);
+      document.getElementById("projet-fullscreen").addEventListener("click", function (e) {
+        if (e.target.id === "projet-fullscreen") closeProjetFullscreen();
+      });
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") closeProjetFullscreen();
+      });
+
+      document.querySelectorAll(".projet-fs-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          openProjetFullscreen(btn.dataset.fsSrc, btn.dataset.fsType);
+        });
+      });
+
+      document.querySelectorAll(".apropos-photo-card img").forEach(function (img) {
+        img.addEventListener("click", function () {
+          openProjetFullscreen(img.getAttribute("src"), "image");
+        });
+      });
+
+      function openMesProjetItem(item) {
+        var projet = item.dataset.openProjet;
+        if (projet && state[projet]) {
+          show(projet);
+        }
+      }
+
+      document.querySelectorAll("#win-mesprojets .file-item--projet").forEach(function (item) {
+        item.addEventListener("click", function () {
+          openMesProjetItem(item);
+        });
+      });
+
+      document.getElementById("detail-close").addEventListener("click", function () {
+        document.getElementById("detail-popup").classList.remove("open");
+      });
+
+      updateClock();
+      setInterval(updateClock, 1000);
+
+      initLazyVideos();
+
+      document.getElementById("tray-audio-toggle").addEventListener("click", function (e) {
+        e.stopPropagation();
+        unlockAudio();
+        uiSoundsMuted = !uiSoundsMuted;
+        updateTrayAudioButton();
+      });
+      updateTrayAudioButton();
+
+      document.body.addEventListener("click", unlockAudio, { once: true });
+    })();
+  </script>
+</body>
+</html>
