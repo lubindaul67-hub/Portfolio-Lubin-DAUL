@@ -1855,37 +1855,65 @@
       height: 30px;
       align-items: center;
       padding: 0 2px;
+      overflow: visible;
       background: linear-gradient(180deg, #3a8fd4 0%, #2566b8 6%, #1e5aa8 50%, #184a90 100%);
       border-top: 1px solid #5cadf0;
     }
 
     #start-btn {
       display: flex;
-      height: 26px;
-      min-width: 92px;
+      height: 28px;
+      min-width: 0;
       align-items: center;
-      gap: 7px;
-      margin: 0 4px;
-      padding: 0 14px 0 8px;
+      gap: 6px;
+      margin: 0 2px 0 0;
+      padding: 0 16px 0 10px;
+      overflow: visible;
       border: none;
-      border-radius: 0 14px 14px 0;
-      background: linear-gradient(180deg, #5ee870 0%, #2db84a 35%, #1e9a38 70%, #168030 100%);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 1px 1px 2px rgba(0, 0, 0, 0.25);
+      border-radius: 0 12px 12px 0;
+      background: linear-gradient(180deg, #3fe85a 0%, #2dc946 18%, #1faa35 55%, #178c2c 100%);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.55),
+        inset 0 -1px 0 rgba(0, 80, 20, 0.35),
+        1px 1px 2px rgba(0, 0, 0, 0.35);
       color: #fff;
-      font-size: 13px;
+      font-family: Tahoma, "MS Sans Serif", sans-serif;
+      font-size: 14px;
       font-style: italic;
       font-weight: bold;
+      letter-spacing: 0.02em;
+      text-shadow: 1px 1px 1px rgba(0, 60, 0, 0.45);
       cursor: pointer;
     }
 
-    #start-btn:hover { filter: brightness(1.08); }
+    #start-btn:hover {
+      filter: brightness(1.06);
+    }
+
+    #start-btn:active {
+      filter: brightness(0.95);
+      box-shadow: inset 0 1px 3px rgba(0, 60, 0, 0.35);
+    }
+
+    .start-lubin-logo-wrap {
+      position: relative;
+      width: 22px;
+      height: 28px;
+      flex-shrink: 0;
+      overflow: visible;
+    }
 
     #start-btn .start-lubin-logo {
-      width: 56px;
-      height: 56px;
-      flex-shrink: 0;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 38px;
+      height: 38px;
       object-fit: contain;
       background: transparent;
+      transform: translate(-50%, -50%);
+      filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
+      pointer-events: none;
     }
 
     #taskbar-windows {
@@ -1973,50 +2001,126 @@
       left: 0;
       z-index: 20001;
       display: none;
-      width: 290px;
-      border: 2px solid #0054e3;
+      width: 392px;
+      overflow: hidden;
+      border: 2px solid #215dc6;
+      border-radius: 8px 8px 0 0;
       background: #fff;
-      box-shadow: 4px 4px 14px rgba(0, 0, 0, 0.4);
+      box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.45);
+      font-family: Tahoma, "MS Sans Serif", sans-serif;
     }
 
-    #start-menu.open { display: block; }
+    #start-menu.open {
+      display: block;
+    }
 
-    .start-header {
-      padding: 14px 16px;
-      background: linear-gradient(90deg, #3a6ea5, #5b9fd4);
+    .start-menu-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 54px;
+      padding: 8px 12px 10px;
+      background: linear-gradient(180deg, #1c66c7 0%, #3a8ce0 45%, #2f7fd4 100%);
       color: #fff;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: bold;
+      text-shadow: 1px 1px 2px rgba(0, 30, 80, 0.5);
+    }
+
+    .start-user-avatar {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      padding: 4px;
+      border: 2px solid rgba(255, 255, 255, 0.85);
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.95);
+      object-fit: contain;
+    }
+
+    .start-menu-body {
+      display: flex;
+      min-height: 300px;
+    }
+
+    .start-menu-left {
+      flex: 1;
+      min-width: 0;
+      padding: 6px 0 8px;
+      background: #fff;
+    }
+
+    .start-menu-right {
+      width: 148px;
+      flex-shrink: 0;
+      padding: 6px 0 8px;
+      border-left: 1px solid #9eb9d9;
+      background: linear-gradient(180deg, #d6e8fa 0%, #b9d4f1 100%);
     }
 
     .start-item {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 9px 18px;
-      font-size: 12px;
+      gap: 8px;
+      padding: 5px 10px;
+      font-size: 11px;
+      line-height: 1.25;
+      color: #000;
       cursor: pointer;
     }
 
-    .start-item:hover {
+    .start-item img {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      object-fit: contain;
+    }
+
+    .start-menu-left .start-item:hover,
+    .start-menu-right .start-item:hover {
       background: #316ac5;
       color: #fff;
     }
 
-    .start-footer {
-      padding: 8px 14px;
-      border-top: 1px solid #aca899;
-      background: #d4d0c8;
-      text-align: right;
+    .start-menu-footer {
+      display: flex;
+      justify-content: flex-end;
+      align-items: stretch;
+      min-height: 36px;
+      padding: 0;
+      border-top: 1px solid #1a4a8c;
+      background: linear-gradient(180deg, #3a8ce0 0%, #1f6ad4 100%);
     }
 
-    .start-footer button {
-      padding: 4px 18px;
-      border: 1px solid #808080;
-      background: linear-gradient(180deg, #f8f8f8, #d4d0c8);
-      font-family: Tahoma, sans-serif;
+    .start-menu-footer button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      padding: 0 18px;
+      border: none;
+      background: transparent;
+      color: #fff;
+      font-family: Tahoma, "MS Sans Serif", sans-serif;
       font-size: 11px;
+      font-weight: bold;
       cursor: pointer;
+    }
+
+    .start-menu-footer button:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .start-footer-icon {
+      display: inline-flex;
+      width: 22px;
+      height: 22px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 3px;
+      background: linear-gradient(180deg, #f08080, #c03030);
+      font-size: 12px;
+      line-height: 1;
     }
 
     .detail-popup {
@@ -3172,22 +3276,57 @@
   </div>
 
   <div id="start-menu">
-    <div class="start-header">Lubin DAUL</div>
-    <div class="start-item" data-open="experience">💼 Mon expérience</div>
-    <div class="start-item" data-open="mesprojets">📁 Mes projets</div>
-    <div class="start-item" data-open="youtube">▶ YouTube - Projets pub</div>
-    <div class="start-item" data-open="formation">🎓 Ma Formation</div>
-    <div class="start-item" data-open="competences">📊 Compétences</div>
-    <div class="start-item" data-open="contact">✉️ Contact</div>
-    <div class="start-item" data-open="apropos">👤 À propos de moi</div>
-    <div class="start-footer">
-      <button type="button" id="start-menu-close">Arrêter</button>
+    <div class="start-menu-user">
+      <img class="start-user-avatar" src="assets/logo%20noir%20ld.png" alt="" width="40" height="40" />
+      <span class="start-user-name">Lubin DAUL</span>
+    </div>
+    <div class="start-menu-body">
+      <div class="start-menu-left">
+        <div class="start-item" data-open="experience">
+          <img src="assets/xp-icons/briefcase-0.png" alt="" />
+          <span>Mon expérience</span>
+        </div>
+        <div class="start-item" data-open="mesprojets">
+          <img src="assets/xp-icons/directory_closed-4.png" alt="" />
+          <span>Mes projets</span>
+        </div>
+        <div class="start-item" data-open="youtube">
+          <img class="icon-youtube" src="assets/logo%20youtube.png" alt="" />
+          <span>YouTube</span>
+        </div>
+        <div class="start-item" data-open="formation">
+          <img src="assets/logo%20info%20com%20.png" alt="" />
+          <span>Ma Formation</span>
+        </div>
+      </div>
+      <div class="start-menu-right">
+        <div class="start-item" data-open="competences">
+          <img src="assets/icone-competence.png" alt="" />
+          <span>Compétences</span>
+        </div>
+        <div class="start-item" data-open="contact">
+          <img src="assets/Icone%20contact.png" alt="" />
+          <span>Contact</span>
+        </div>
+        <div class="start-item" data-open="apropos">
+          <img src="assets/logo%20noir%20ld.png" alt="" />
+          <span>À propos de moi</span>
+        </div>
+      </div>
+    </div>
+    <div class="start-menu-footer">
+      <button type="button" id="start-menu-close">
+        <span class="start-footer-icon" aria-hidden="true">⏻</span>
+        <span>Fermer</span>
+      </button>
     </div>
   </div>
 
   <div id="taskbar">
     <button type="button" id="start-btn" aria-label="Menu Démarrer">
-      <img class="start-lubin-logo" src="assets/logo%20noir%20ld.png" alt="Lubin DAUL" width="56" height="56" loading="lazy" />
+      <span class="start-lubin-logo-wrap" aria-hidden="true">
+        <img class="start-lubin-logo" src="assets/logo%20noir%20ld.png" alt="" />
+      </span>
       <span>Démarrer</span>
     </button>
     <div id="taskbar-windows"></div>
