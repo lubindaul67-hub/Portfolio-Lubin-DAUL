@@ -1454,6 +1454,16 @@
       background: #fff;
     }
 
+    .cv-viewer-img {
+      flex: 1;
+      width: 100%;
+      min-height: 0;
+      max-height: calc(100% - 36px);
+      object-fit: contain;
+      border: 2px inset #c0c0c0;
+      background: #fff;
+    }
+
     .apropos-sidebar-title {
       margin: 0 0 10px;
       padding-bottom: 6px;
@@ -1996,36 +2006,36 @@
 
   <div id="desktop">
     <div class="desktop-icon" data-win="experience" style="top: 16px; left: 16px;">
-      <div class="icon-slot"><img src="assets/xp-icons/briefcase-0.png" alt="" loading="lazy" /></div>
+      <div class="icon-slot"><img src="assets/xp-icons/briefcase-0.png" alt="" /></div>
       <span class="desktop-label">Mon expérience</span>
     </div>
     <div class="desktop-icon" data-win="mesprojets" style="top: 16px; left: 132px;">
-      <div class="icon-slot"><img src="assets/xp-icons/directory_closed-4.png" alt="" loading="lazy" /></div>
+      <div class="icon-slot"><img src="assets/xp-icons/directory_closed-4.png" alt="" /></div>
       <span class="desktop-label">Mes projets</span>
     </div>
     <div class="desktop-icon icon-youtube-wrap" data-win="youtube" style="top: 16px; left: 248px;">
-      <div class="icon-slot"><img class="icon-youtube" src="assets/logo%20youtube.png" alt="YouTube" loading="lazy" /></div>
+      <div class="icon-slot"><img class="icon-youtube" src="assets/logo%20youtube.png" alt="YouTube" /></div>
       <span class="desktop-label">YouTube</span>
     </div>
     <div class="desktop-icon" data-win="formation" style="top: 132px; left: 16px;">
-      <div class="icon-slot"><img src="assets/logo%20info%20com%20.png" alt="" loading="lazy" /></div>
+      <div class="icon-slot"><img src="assets/logo%20info%20com%20.png" alt="" /></div>
       <span class="desktop-label">Ma Formation</span>
     </div>
     <div class="desktop-icon" data-win="competences" style="top: 132px; left: 132px;">
-      <div class="icon-slot"><img src="assets/ico%CC%82ne%20comp%C3%A9tence.png" alt="" loading="lazy" /></div>
+      <div class="icon-slot"><img src="assets/icone-competence.png" alt="" /></div>
       <span class="desktop-label">Compétences</span>
     </div>
     <div class="desktop-icon" data-win="contact" style="top: 248px; left: 16px;">
-      <div class="icon-slot"><img src="assets/Icone%20contact.png" alt="" loading="lazy" /></div>
+      <div class="icon-slot"><img src="assets/Icone%20contact.png" alt="" /></div>
       <span class="desktop-label">Contact</span>
     </div>
     <div class="desktop-icon icon-ld-logo-wrap" data-win="apropos" style="top: 248px; left: 132px;">
-      <div class="icon-slot"><img src="assets/logo%20noir%20ld.png" alt="" loading="lazy" /></div>
+      <div class="icon-slot"><img src="assets/logo%20noir%20ld.png" alt="" /></div>
       <span class="desktop-label">À propos de moi</span>
     </div>
     <div class="desktop-icon" data-win="cv" style="top: 132px; left: 248px;">
       <div class="icon-slot">
-        <img src="assets/Photo%20CV%20%20DAUL%20Lubin.jpg" alt="" loading="lazy" />
+        <img src="assets/photo-cv-daul-lubin.jpg" alt="" />
       </div>
       <span class="desktop-label">CV</span>
     </div>
@@ -2175,7 +2185,7 @@
       <div class="projet-media-col">
         <img class="projet-main-media" src="assets/Affiche%20GIG%20DAUL%20Lubin%202P1.png" alt="Affiche Le Corbeau - Lubin DAUL" loading="lazy" />
         <div class="lazy-video-wrap lazy-video-wrap--projet">
-          <video class="projet-video lazy-video" controls preload="none" data-src="assets/Le%20corbeau%20vide%CC%81o.mp4" poster="assets/Affiche%20GIG%20DAUL%20Lubin%202P1.png" title="Le Corbeau - animation"></video>
+          <video class="projet-video lazy-video" controls preload="none" data-src="assets/le-corbeau-video.mp4" poster="assets/Affiche%20GIG%20DAUL%20Lubin%202P1.png" title="Le Corbeau - animation"></video>
           <button type="button" class="lazy-video-play" aria-label="Lire l'animation Le Corbeau"><span class="lazy-video-play-icon" aria-hidden="true">▶</span><span class="lazy-video-play-label">Lire la vidéo</span></button>
         </div>
       </div>
@@ -2184,7 +2194,7 @@
           <h2>Le Corbeau</h2>
           <div class="projet-title-actions">
             <button type="button" class="projet-fs-btn" data-fs-src="assets/Affiche%20GIG%20DAUL%20Lubin%202P1.png" data-fs-type="image">Agrandir l'affiche</button>
-            <button type="button" class="projet-fs-btn" data-fs-src="assets/Le%20corbeau%20vide%CC%81o.mp4" data-fs-type="video">Agrandir la vidéo</button>
+            <button type="button" class="projet-fs-btn" data-fs-src="assets/le-corbeau-video.mp4" data-fs-type="video">Agrandir la vidéo</button>
           </div>
         </div>
         <p>Ce visuel est une <strong>réinterprétation de l'affiche</strong> du film <em>Le Corbeau</em>, sorti en <strong>1943</strong> et réalisé par <strong>Henri-Georges Clouzot</strong>.</p>
@@ -2360,7 +2370,7 @@
   <div id="win-cv" class="xp-window" data-id="cv" style="left: 100px; top: 40px; width: 780px; height: 560px;">
     <div class="titlebar">
       <img class="titlebar-icon" src="assets/xp-icons/document-0.png" alt="" loading="lazy" />
-      <span class="titlebar-text">CV - Lubin DAUL.pdf</span>
+      <span class="titlebar-text">CV - Lubin DAUL</span>
       <div class="titlebar-buttons">
         <button type="button" class="btn-min" title="Réduire">_</button>
         <button type="button" class="btn-max" title="Agrandir">□</button>
@@ -2370,11 +2380,9 @@
     <div class="menubar"><span>Fichier</span><span>Édition</span><span>Affichage</span></div>
     <div class="cv-viewer-body">
       <p style="margin:0 0 6px;text-align:right;">
-        <button type="button" class="projet-fs-btn" data-fs-src="assets/CV%20Cre%CC%81a%20DAUL%20Lubin.pdf" data-fs-type="pdf">Plein écran</button>
+        <button type="button" class="projet-fs-btn" data-fs-src="assets/photo-cv-daul-lubin.jpg" data-fs-type="image">Plein écran</button>
       </p>
-      <object data="assets/CV%20Cre%CC%81a%20DAUL%20Lubin.pdf" type="application/pdf" title="CV Lubin DAUL">
-        <p style="padding:12px;">Impossible d'afficher le PDF ici. <a href="assets/CV%20Cre%CC%81a%20DAUL%20Lubin.pdf" target="_blank" rel="noopener noreferrer">Ouvrir le CV</a></p>
-      </object>
+      <img class="cv-viewer-img" src="assets/photo-cv-daul-lubin.jpg" alt="CV Lubin DAUL" loading="lazy" />
     </div>
     <div class="statusbar"><span>CV Créa DAUL Lubin</span><span>Lubin DAUL</span></div>
   </div>
@@ -2413,7 +2421,7 @@
               <p>Cette année, j'ai participé à l'organisation de la Journée Portes Ouvertes de la formation au sein d'une <strong>équipe de 8 étudiants</strong>. Nous avons accueilli <strong>220 visiteurs</strong> et préparé plusieurs salles thématiques pour présenter la formation et ses projets.</p>
               <p>Le projet ne s'est pas limité à la JPO : salons d'orientation, immersions lycéens et actions de communication tout au long de l'année.</p>
               <div class="jpo-media">
-                <img src="assets/JPO%20e%CC%81quipe.png" alt="Équipe JPO" loading="lazy" />
+                <img src="assets/jpo-equipe.png" alt="Équipe JPO" loading="lazy" />
                 <p class="jpo-caption">L'équipe organisatrice</p>
               </div>
             </div>
@@ -2434,7 +2442,7 @@
                   <p class="jpo-caption">Salon d'orientation</p>
                 </div>
                 <div>
-                  <img src="assets/JPO%20pre%CC%81sentation.png" alt="Présentation lycée" loading="lazy" />
+                  <img src="assets/jpo-presentation.png" alt="Présentation lycée" loading="lazy" />
                   <p class="jpo-caption">Présentation dans les lycées</p>
                 </div>
               </div>
@@ -2503,7 +2511,7 @@
                   <p class="jpo-caption">Notre équipe le Jour J</p>
                 </div>
                 <div>
-                  <img src="assets/JPO%20salle%20cre%CC%81a.png" alt="Salle créa" loading="lazy" />
+                  <img src="assets/jpo-salle-crea.png" alt="Salle créa" loading="lazy" />
                   <p class="jpo-caption">La salle créa durant la JPO</p>
                 </div>
               </div>
@@ -2652,17 +2660,17 @@
                 </div>
                 <div class="leclerc-media-item">
                   <div class="leclerc-media-thumb">
-                    <img src="assets/Leclerc%20post%20insta%20activite%CC%81%20carnaval.png" alt="Post Instagram carnaval" loading="lazy" />
+                    <img src="assets/leclerc-insta-carnaval.png" alt="Post Instagram carnaval" loading="lazy" />
                   </div>
                   <p class="leclerc-caption">Instagram - activité carnaval</p>
-                  <button type="button" class="projet-fs-btn" data-fs-src="assets/Leclerc%20post%20insta%20activite%CC%81%20carnaval.png" data-fs-type="image">Agrandir</button>
+                  <button type="button" class="projet-fs-btn" data-fs-src="assets/leclerc-insta-carnaval.png" data-fs-type="image">Agrandir</button>
                 </div>
                 <div class="leclerc-media-item">
                   <div class="leclerc-media-thumb">
-                    <img src="assets/Leclerc%20Post%20insta%20arbre%20a%CC%80%20chat%20.png" alt="Post Instagram arbre à chat" loading="lazy" />
+                    <img src="assets/leclerc-insta-arbre-chat.png" alt="Post Instagram arbre à chat" loading="lazy" />
                   </div>
                   <p class="leclerc-caption">Instagram - arbre à chat</p>
-                  <button type="button" class="projet-fs-btn" data-fs-src="assets/Leclerc%20Post%20insta%20arbre%20a%CC%80%20chat%20.png" data-fs-type="image">Agrandir</button>
+                  <button type="button" class="projet-fs-btn" data-fs-src="assets/leclerc-insta-arbre-chat.png" data-fs-type="image">Agrandir</button>
                 </div>
               </div>
             </div>
@@ -2930,7 +2938,7 @@
   <!-- Compétences -->
   <div id="win-competences" class="xp-window" data-id="competences" style="left: 150px; top: 76px; width: 580px; height: 390px;">
     <div class="titlebar">
-      <img class="titlebar-icon" src="assets/ico%CC%82ne%20comp%C3%A9tence.png" alt="" loading="lazy" />
+      <img class="titlebar-icon" src="assets/icone-competence.png" alt="" loading="lazy" />
       <span class="titlebar-text">Compétences</span>
       <div class="titlebar-buttons">
         <button type="button" class="btn-min">_</button>
@@ -3030,7 +3038,7 @@
                   <img src="assets/Oscar.JPG" alt="Lubin - Oscar" loading="lazy" />
                 </figure>
                 <figure class="apropos-photo-card apropos-photo-card--center">
-                  <img src="assets/Me%CC%81daille.JPG" alt="Lubin - médaille" loading="lazy" />
+                  <img src="assets/medaille.jpg" alt="Lubin - médaille" loading="lazy" />
                 </figure>
                 <figure class="apropos-photo-card apropos-photo-card--right">
                   <img src="assets/Football.jpg" alt="Lubin - football" loading="lazy" />
@@ -3311,6 +3319,9 @@
             });
           }
           video.addEventListener("play", function () {
+            ensureLazyVideoLoaded(video);
+          });
+          video.addEventListener("click", function () {
             ensureLazyVideoLoaded(video);
           });
         });
