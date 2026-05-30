@@ -1497,10 +1497,14 @@
       position: absolute;
       top: 12px;
       right: 120px;
-      display: flex;
+      display: none;
       flex-wrap: wrap;
       gap: 8px;
       z-index: 2;
+    }
+
+    .projet-fullscreen-actions.is-visible {
+      display: flex;
     }
 
     .projet-fullscreen-actions .cv-pdf-btn {
@@ -2544,7 +2548,7 @@
   </div>
 
   <div id="projet-fullscreen" class="projet-fullscreen" aria-hidden="true">
-    <div class="projet-fullscreen-actions" id="projet-fullscreen-cv-actions" hidden>
+    <div class="projet-fullscreen-actions" id="projet-fullscreen-cv-actions" hidden aria-hidden="true">
       <a class="cv-pdf-btn" href="assets/cv-daul-lubin.pdf" download="CV-Lubin-DAUL.pdf">Télécharger le CV (PDF)</a>
       <button type="button" class="cv-pdf-btn" id="cv-print-pdf-fs">Imprimer le CV (PDF)</button>
     </div>
@@ -4003,10 +4007,17 @@
         }
       }
 
+      function setCvFullscreenActions(visible) {
+        const cvActions = document.getElementById("projet-fullscreen-cv-actions");
+        if (!cvActions) return;
+        cvActions.classList.toggle("is-visible", visible);
+        cvActions.hidden = !visible;
+        cvActions.setAttribute("aria-hidden", visible ? "false" : "true");
+      }
+
       function openCvFullscreen() {
         const overlay = document.getElementById("projet-fullscreen");
         const content = document.getElementById("projet-fullscreen-content");
-        const cvActions = document.getElementById("projet-fullscreen-cv-actions");
         if (!overlay || !content) return;
         content.innerHTML = "";
         const img = document.createElement("img");
@@ -4014,7 +4025,7 @@
         img.alt = "CV Lubin DAUL";
         img.loading = "lazy";
         content.appendChild(img);
-        if (cvActions) cvActions.hidden = false;
+        setCvFullscreenActions(true);
         overlay.classList.add("open");
         overlay.setAttribute("aria-hidden", "false");
       }
@@ -4022,9 +4033,8 @@
       function openProjetFullscreen(src, type) {
         const overlay = document.getElementById("projet-fullscreen");
         const content = document.getElementById("projet-fullscreen-content");
-        const cvActions = document.getElementById("projet-fullscreen-cv-actions");
         if (!overlay || !content) return;
-        if (cvActions) cvActions.hidden = true;
+        setCvFullscreenActions(false);
         content.innerHTML = "";
         if (type === "image") {
           const img = document.createElement("img");
@@ -4051,11 +4061,10 @@
       function closeProjetFullscreen() {
         const overlay = document.getElementById("projet-fullscreen");
         const content = document.getElementById("projet-fullscreen-content");
-        const cvActions = document.getElementById("projet-fullscreen-cv-actions");
         if (!overlay) return;
         overlay.classList.remove("open");
         overlay.setAttribute("aria-hidden", "true");
-        if (cvActions) cvActions.hidden = true;
+        setCvFullscreenActions(false);
         if (content) {
           const v = content.querySelector("video");
           if (v) v.pause();
